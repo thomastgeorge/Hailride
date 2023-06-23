@@ -97,7 +97,7 @@ const Signup = () => {
                                 value={email} onChange={(e) => setemail(e.target.value)} onKeyDown={handleKeyDown}></input>
                             <div style={{ width: "250px", background: "#e8f0fe" }} className="d-flex justify-content-between rounded-3 m-2 p-2 pe-3">
                                 <input style={{ outline: "none", border: "none", background: "#e8f0fe" }} type={viewPassword ? "text" : "password"} placeholder='Password' value={pswd} onChange={(e) => setpswd(e.target.value)} onKeyDown={handleKeyDown}></input>
-                                <div onClick={() => setviewPassword(!viewPassword)} className='d-flex me-0' style={{ cursor: "pointer", margin: "auto" }} >
+                                <div onClick={() => setviewPassword(!viewPassword)} className='d-flex me-0 pe-1' style={{ cursor: "pointer", margin: "auto" }} >
                                     {
                                         viewPassword ?
                                             <EyeClosedIcon size={18} />
