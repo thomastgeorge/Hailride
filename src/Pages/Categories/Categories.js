@@ -13,15 +13,15 @@ const Categories = () => {
             </div>
             <div className='compShadow btn my-4 mt-5 p-4 w-100 rounded-3 d-flex justify-content-center'
                 style={{ background: "#dede28cf" }} onClick={() => { nav('/projects') }}>
-                <b className='fs-1'>Projects</b>
+                <b className='fs-2'>Projects</b>
             </div>
             <div className='compShadow btn my-4 p-4 w-100 rounded-3 d-flex justify-content-center'
                 style={{ background: "#dede28cf" }} onClick={() => { nav('/assignments') }}>
-                <b className='fs-1'>Assignments</b>
+                <b className='fs-2'>Assignments</b>
             </div>
             <div className='compShadow btn my-4 p-4 w-100 rounded-3 d-flex justify-content-center'
                 style={{ background: "#dede28cf" }} onClick={() => { nav('/records') }}>
-                <b className='fs-1'>Records</b>
+                <b className='fs-2'>Records</b>
             </div>
         </div>
     )
