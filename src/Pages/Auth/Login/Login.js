@@ -43,7 +43,7 @@ const Login = ({ setauthenticated }) => {
         const response = await fetch(process.env.REACT_APP_BACKEND_URL + "/api/v1/app/auth/logIn", {
             method: "POST",
             body: JSON.stringify({
-                email: email,
+                email: email.toLowerCase(),
                 password: pswd,
             }),
             headers: {
@@ -93,7 +93,7 @@ const Login = ({ setauthenticated }) => {
             <div className='rounded-3 p-4 d-flex flex-column align-items-center' style={{ backgroundColor: "#dede28cf", boxShadow: "rgb(121 121 121 / 28%) 6px 6px 13px 1px" }}>
                 {/* <img className="m-4 mb-2" src="/tiei.png" style={{ width: "50%" }} /> */}
                 {/* <b className='h1 fw-bold py-3 pb-2'><i>Assign Me</i></b> */}
-                <img src="logo-phase2.png" height="50px" className='my-3'/>
+                <img src="logo-phase2.png" height="50px" className='my-3' />
                 {
                     err !== "" &&
                     <b className='text-danger mb-2'>{err}</b>

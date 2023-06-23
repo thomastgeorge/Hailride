@@ -43,7 +43,7 @@ const Signup = () => {
             // Adding body or contents to send
             body: JSON.stringify({
                 name: name,
-                email: email,
+                email: email.toLowerCase(),
                 password: pswd,
             }),
             headers: {
@@ -85,7 +85,7 @@ const Signup = () => {
                     success != "" ?
                         <>
                             <b className='text-success mb-2'>{success}</b>
-                            <div onClick={() => nav('login')} className='btn btn-dark w-100 ms-2 mt-3 py-2'>
+                            <div onClick={() => nav('/login')} className='btn btn-dark w-100 ms-2 mt-3 py-2'>
                                 <b>Continue to Login</b>
                             </div>
                         </>
