@@ -11,7 +11,7 @@ const Dashboard = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const [downloadLoader, setdownloadLoader] = useState(false)
-    const [loader, setloader] = useState(false)
+    const [loader, setloader] = useState(true)
 
     const [requests, setRequests] = useState([])
     const [arrived, setarrived] = useState(false)
