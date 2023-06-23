@@ -11,6 +11,7 @@ const Dashboard = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const [downloadLoader, setdownloadLoader] = useState(false)
+    const [loader, setloader] = useState(false)
 
     const [requests, setRequests] = useState([])
     const [arrived, setarrived] = useState(false)
@@ -19,6 +20,7 @@ const Dashboard = () => {
     const [data, setdata] = useState({})
 
     useEffect(() => {
+        setloader(true)
         Axios.post("/api/v1/service/getMyRequests", {
             userEmail: user.email,
             // requirementId: searchVal
@@ -26,10 +28,12 @@ const Dashboard = () => {
             .then((res) => {
                 console.log(res);
                 setRequests(res.data.requests.reverse())
-                setarrived(true);
+                setarrived(true)
+                setloader(false)
             })
             .catch((err) => {
                 setisError(true)
+                setloader(false)
             })
         return () => {
             setRequests([])
@@ -75,7 +79,7 @@ const Dashboard = () => {
     }
 
     const downloadFile = (fileName) => {
-        console.log("heheheh", fileName);
+        console.log("heheheh", fileName)
         setdownloadLoader(true)
         Axios.get(`/downloadFile?fileName=${fileName}`, {
             responseType: 'blob',
@@ -83,14 +87,14 @@ const Dashboard = () => {
             .then(function (res) {
                 setdownloadLoader(false)
                 console.log(res)
-                var ee = document.createElement("a");
-                ee.href = URL.createObjectURL(new Blob([res.data]));
+                var ee = document.createElement("a")
+                ee.href = URL.createObjectURL(new Blob([res.data]))
                 ee.setAttribute("download", data.uploadedFileName)
                 document.body.append(ee)
                 ee.click()
             })
             .catch(err => {
-                console.log(err);
+                console.log(err)
                 setdownloadLoader(false)
             })
     }
@@ -100,7 +104,17 @@ const Dashboard = () => {
             {
                 requests.length === 0 ?
                     <div className='d-flex justify-content-center my-3 bg-light p-3 rounded-3 fw-bold'>
-                        No Requests yet!
+                        {
+                            loader ?
+                                <Ring
+                                    size={20}
+                                    speed={2}
+                                    color="white"
+                                />
+                                :
+                                <>No Requests yet!</>
+
+                        }
                     </div>
                     :
                     requests.map((req) => {
