@@ -1,5 +1,5 @@
 .App {
-  text-align: center;
+  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
 .App-logo {
@@ -32,7 +32,12 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
+}
+
+.compShadow {
+  box-shadow: 2px 3px 7px 2px #a6a6a6;
 }
