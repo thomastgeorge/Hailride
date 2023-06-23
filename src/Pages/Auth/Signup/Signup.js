@@ -73,9 +73,9 @@ const Signup = () => {
     }
     return (
         <div className='d-flex justify-content-center align-items-center' style={{ height: '100vh', width: '100vw' }}>
-            <div className='rounded-3 p-4 d-flex flex-column align-items-center' style={{ backgroundColor: "#fff95596", boxShadow: "rgb(121 121 121 / 28%) 6px 6px 13px 1px" }}>
+            <div className='rounded-3 p-4 d-flex flex-column align-items-center' style={{ backgroundColor: "#dede28cf", boxShadow: "rgb(121 121 121 / 28%) 6px 6px 13px 1px" }}>
                 {/* <img className="m-4 mb-2" src="/tiei.png" style={{ width: "50%" }} /> */}
-                <b className='h1 fw-bold mb-3 py-3'><i>Snappy</i></b>
+                <b className='h1 fw-bold mb-3 py-3'><i>Assign Me</i></b>
                 {
                     err !== "" &&
                     <b className='text-danger mb-2'>{err}</b>
