@@ -109,7 +109,7 @@ const Dashboard = () => {
                                 <Ring
                                     size={20}
                                     speed={2}
-                                    color="white"
+                                    color="black"
                                 />
                                 :
                                 <>No Requests yet!</>
