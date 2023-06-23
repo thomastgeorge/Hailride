@@ -9,7 +9,7 @@ const Categories = () => {
         <div className='p-3' style={{ width: "100vw", maxWidth: "500px" }}>
 
             <div className='mb-4'>
-                <b className='my-3 fs-3'>Busy with other Works? Don't worry, we will do it for you.. 😉</b>
+                <b className='my-3 fs-5'>Busy with other Works? Don't worry, we will do it for you.. 😉</b>
             </div>
             <div className='compShadow btn my-4 mt-5 p-4 w-100 rounded-3 d-flex justify-content-center'
                 style={{ background: "#dede28cf" }} onClick={() => { nav('/projects') }}>
