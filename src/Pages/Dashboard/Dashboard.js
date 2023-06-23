@@ -11,7 +11,8 @@ const Dashboard = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const [downloadLoader, setdownloadLoader] = useState(false)
-    const [loader, setloader] = useState(true)
+    const [loading, setLoading] = useState(false)
+    const [contentloader, setcontentloader] = useState(false)
 
     const [requests, setRequests] = useState([])
     const [arrived, setarrived] = useState(false)
@@ -20,7 +21,7 @@ const Dashboard = () => {
     const [data, setdata] = useState({})
 
     useEffect(() => {
-        setloader(true)
+        setcontentloader(true)
         Axios.post("/api/v1/service/getMyRequests", {
             userEmail: user.email,
             // requirementId: searchVal
@@ -29,11 +30,11 @@ const Dashboard = () => {
                 console.log(res);
                 setRequests(res.data.requests.reverse())
                 setarrived(true)
-                setloader(false)
+                setcontentloader(false)
             })
             .catch((err) => {
                 setisError(true)
-                setloader(false)
+                setcontentloader(false)
             })
         return () => {
             setRequests([])
@@ -61,6 +62,9 @@ const Dashboard = () => {
 
     const handleCancel = () => {
         setIsModalOpen(false)
+    }
+
+    const handleDelete = () => {
         if (window.confirm("Are you sure you want to delete?") === true) {
             Axios.delete('/api/v1/service/deleteRequestById', {
                 params: {
@@ -105,9 +109,9 @@ const Dashboard = () => {
                 requests.length === 0 ?
                     <div className='d-flex justify-content-center my-3 bg-light p-3 rounded-3 fw-bold'>
                         {
-                            loader ?
+                            contentloader ?
                                 <Ring
-                                    size={20}
+                                    size={25}
                                     speed={2}
                                     color="black"
                                 />
@@ -132,7 +136,16 @@ const Dashboard = () => {
                         )
                     })
             }
-            <Modal title={<b># {requestId}</b>} open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+            <Modal title={<b># {requestId}</b>} open={isModalOpen} onOk={handleOk} onCancel={handleCancel}
+                footer={[
+                    <Button key="back" onClick={handleDelete}>
+                        Delete
+                    </Button>,
+                    <Button key="submit" type="primary" loading={loading} onClick={handleOk}>
+                        Ok
+                    </Button>,
+                ]}
+            >
                 <div className='my-3'>
                     {
                         typeof data.appName != "undefined" &&

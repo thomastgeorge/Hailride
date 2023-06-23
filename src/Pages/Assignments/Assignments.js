@@ -20,6 +20,7 @@ const Assignments = () => {
   const [question, setquestion] = useState("")
   const [comments, setcomments] = useState("")
   const [offer, setoffer] = useState("")
+  const [whatsapp, setwhatsapp] = useState("")
   const [uploadFileName, setuploadFileName] = useState("")
   const [selectedFile, setSelectedFile] = useState(null)
 
@@ -32,6 +33,7 @@ const Assignments = () => {
       subject: subject,
       comments: comments,
       question: question,
+      whatsapp: whatsapp,
       offer: offer,
       uploadFileName: filename
     })
@@ -77,7 +79,7 @@ const Assignments = () => {
 
   const validate = () => {
     setloading(true)
-    if (subject === "" || comments === "" || question === "" || offer === "") {
+    if (subject === "" || comments === "" || question === "" || offer === "" || whatsapp === "") {
       setvalid(false)
       setloading(false)
       handleScrollToTop()
@@ -143,6 +145,12 @@ const Assignments = () => {
               </div>
               <div>
                 <i className='text-danger' style={{ fontSize: "14px" }}>Note : If you have multiple documents, make it as a single doc or pdf to upload</i>
+              </div>
+              <div className='compShadow my-2 d-flex justify-content-between align-items-center rounded-3 p-3 w-100'
+                style={{ background: "#ffff62a8" }}>
+                <b>WhatsApp Number<span className='text-danger'>*</span></b>
+                <input type="number" value={whatsapp} onChange={e => setwhatsapp(e.target.value)} className='p-1 rounded-3'
+                  style={!valid && whatsapp == "" ? { borderColor: "red", background: "#ff00001c" } : {}} />
               </div>
               <div className='compShadow my-2 d-flex justify-content-between align-items-center rounded-3 p-3 w-100'
                 style={{ background: "#ffff62a8" }}>
