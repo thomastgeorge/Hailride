@@ -28,7 +28,7 @@ const Records = () => {
 
     Axios.post('/api/v1/service/postRecordRequest', {
       addedBy: user.email,
-      requestType: "project",
+      requestType: "record",
       subject: subject,
       comments: comments,
       whatsapp: whatsapp,
