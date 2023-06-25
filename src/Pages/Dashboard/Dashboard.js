@@ -128,7 +128,7 @@ const Dashboard = () => {
                                     <b className='fs-5'>#{req.requestId}</b>
 
                                     <div className='d-flex align-items-center mx-1 px-2 py-1 rounded-3 text-white'
-                                        style={req.accepted.status === "pending" ? { background: "black" } : (req.accepted.status === "accepted" ? { background: "#818181" } : { background: "green" })}><HistoryIcon size={14} /><p className='m-0 mx-2' style={{ width: "60px", fontSize: "14px" }}>{req.accepted.status}</p>
+                                        style={req.accepted.status === "pending" ? { background: "#81818154" } : (req.accepted.status === "accepted" ? { background: "black" } : { background: "green" })}><HistoryIcon size={14} /><p className='m-0 mx-2' style={{ width: "60px", fontSize: "14px" }}>{req.accepted.status}</p>
                                     </div>
                                 </div>
                                 <div className='d-flex'>

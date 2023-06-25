@@ -13,10 +13,10 @@ const NavBar = () => {
     const [dashboardSelected, setdashboardSelected] = useState(true)
 
     useEffect(() => {
-        if (loc.pathname === "/dashboard" || loc.pathname === "/dashboard") {
+        if (loc.pathname === "/" || loc.pathname === "/dashboard") {
             setdashboardSelected(true)
         }
-        else if (loc.pathname === "/categories") {
+        else if (loc.pathname === "/categories" || loc.pathname === "/accepted") {
             setdashboardSelected(false)
         }
     }, [])
