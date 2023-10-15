@@ -4,6 +4,8 @@ import React, { useState } from "react";
 import "./App.css";
 import Routes from "./Routes/Routes";
 
+import PlacesAutocomplete from 'react-places-autocomplete';
+
 export const UserContext = React.createContext();
 
 function App() {

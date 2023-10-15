@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { Route, Routes as Switch } from 'react-router-dom'
 import { UserContext } from '../App'
 import Categories from '../Pages/Categories/Categories'
@@ -11,6 +11,9 @@ import Profile from '../Pages/Profile/Profile'
 import AdminDashboard from '../Pages/Admin/AdminDashboard/AdminDashboard'
 import Accepted from '../Pages/Admin/Accepted/Accepted'
 import AdminRequests from '../Pages/Admin/AdminRequests/AdminRequests'
+import { Axios } from '../Config/Axios/Axios'
+import Search from '../Pages/Search/Search'
+import Publish from '../Pages/Publish/Publish'
 
 const Home = () => {
 
@@ -38,7 +41,10 @@ const Home = () => {
                             <Route path="/projects" element={<Projects />} />
                             <Route path="/assignments" element={<Assignments />} />
                             <Route path="/records" element={<Records />} />
-                            <Route path="/*" element={<Dashboard />} />
+
+                            <Route path="/search" element={<Search />} />
+                            <Route path="/publish" element={<Publish />} />
+                            <Route path="/*" element={<Search />} />
                         </>
 
                 }
