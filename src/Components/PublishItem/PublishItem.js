@@ -3,11 +3,15 @@ import { Axios } from '../../Config/Axios/Axios'
 import { EllipsisIcon } from '@primer/octicons-react'
 import { UserContext } from '../../App'
 import { useNavigate } from 'react-router-dom'
+import { DotSpinner } from '@uiball/loaders'
+
 
 const PublishItem = ({ ride, type }) => {
 
     const [deleteSection, setDeleteSection] = useState(false)
     const [userDetails, setuserDetails] = useState(null)
+
+    const [loader, setloader] = useState(false)
 
     const { user } = useContext(UserContext)
 
@@ -24,6 +28,23 @@ const PublishItem = ({ ride, type }) => {
                 setuserDetails(res.data.user)
             })
     }, [])
+
+    const emergencySOS = () => {
+        if (window.confirm("Are you sure, you want to active SOS ?"))
+        {
+            setloader(true);
+            Axios.post('/api/v1/app/rides/emergencySOS', {
+                rider: userDetails,
+                userDetails: user,
+                emergencyContact: user.emergencyContact.email
+            })
+                .then(res => {
+                    setloader(false)
+                    window.alert('Emergency Contact has been notified')
+                })
+                .catch(err => { console.log(err); setloader(false) })
+        }
+    }
 
 
     const cancelRide = () => {
@@ -115,11 +136,11 @@ const PublishItem = ({ ride, type }) => {
                 <div className="p-2 pt-2 d-flex justify-content-between rounded" style={{ backgroundColor: "#1c104154" }}>
                     <div className="p-2 rounded text-start">
                         <b>Vehicle Details</b>
-                        <div className="d-flex gap-2">
+                        <div className="d-flex gap-2" style={{ textWrap: "nowrap" }}>
                             <EllipsisIcon size={20} />
                             {userDetails?.vehicleDetails?.number}
                         </div>
-                        <div className="d-flex gap-2">
+                        <div className="d-flex gap-2" style={{ textWrap: "nowrap" }}>
                             <EllipsisIcon size={20} />
                             {userDetails?.vehicleDetails?.model}
                         </div>
@@ -130,6 +151,18 @@ const PublishItem = ({ ride, type }) => {
                             <div className="btn btn-danger px-5" onClick={hailRide}>Hail</div>
                         </div>
                     }
+                    {
+                        type === "hailed" && ride.status === "started" &&
+                        <div className="d-flex align-items-center">
+                            {
+                                loader ?
+                                    <DotSpinner />
+                                    :
+                                    <div className="btn btn-danger px-5" onClick={emergencySOS}>Emergency SOS</div>
+                            }
+                        </div>
+                    }
+
 
                 </div>
             }

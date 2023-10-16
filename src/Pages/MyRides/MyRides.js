@@ -26,6 +26,9 @@ const MyRides = () => {
 
     return (
         <div className="p-3">
+            <div className='d-flex flex-column align-items-center'>
+                <img src="mainCar.gif" style={{ width: 'calc( 100vw - 20px )' }} />
+            </div>
             <h2 className="my-3"><b>My Rides</b></h2>
             <div className="text-center w-100">
                 {

@@ -95,7 +95,7 @@ const Login = ({ setauthenticated }) => {
                     style={{ width: "100%" }} />
                 {/* <b className='h1 fw-bold py-3 pb-2'><i>Assign Me</i></b> */}
                 <div className="p-3 pt-0 d-flex flex-column align-items-center">
-                    <img src="logo-phase2.png" height="50px" className='my-3' />
+                    <img src="hailride.png" height="50px" className='my-3' />
                     {
                         err !== "" &&
                         <b className='text-danger mb-2'>{err}</b>
