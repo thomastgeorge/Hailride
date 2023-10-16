@@ -2,10 +2,13 @@ import React, { useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import PublishItem from '../../Components/PublishItem/PublishItem'
 import { LocationIcon } from '@primer/octicons-react'
+import { LeapFrog } from '@uiball/loaders'
 
 const SearchResult = () => {
 
     const loc = useLocation()
+
+    const [loader, setloader] = useState(false)
 
     const [months, setmonths] = useState(['January', 'February', 'March', 'April',
         'May', 'June', 'July', 'August',
@@ -30,14 +33,19 @@ const SearchResult = () => {
             <hr />
             <div className="text-center w-100">
                 {
-                    loc.state.rides.length == 0 ?
-                        <p className='fs-2 fw-bold'>No rides for this day.</p>
+                    loader ?
+                        <div className='d-flex flex-column align-items-center'>
+                            <LeapFrog />
+                        </div>
                         :
-                        loc.state.rides.map(ride => {
-                            return (
-                                <PublishItem ride={ride} type="hail"/>
-                            )
-                        })
+                        loc.state.rides.length === 0 ?
+                            <p className='fs-2 fw-bold'>No rides for this day.</p>
+                            :
+                            loc.state.rides.map(ride => {
+                                return (
+                                    <PublishItem ride={ride} type="hail" />
+                                )
+                            })
                 }
             </div>
         </div>

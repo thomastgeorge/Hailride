@@ -4,16 +4,19 @@ import { PlusIcon } from '@primer/octicons-react'
 import AddItem from '../../Components/AddItem/AddItem';
 import { Axios } from '../../Config/Axios/Axios';
 import { UserContext } from '../../App';
+import { LeapFrog } from '@uiball/loaders';
 
 const Publish = () => {
 
     const [open, setOpen] = useState(false);
 
     const [rides, setRides] = useState([])
+    const [loader, setloader] = useState(false)
 
     const { user } = useContext(UserContext)
 
     useEffect(() => {
+        setloader(true)
         Axios.get('/api/v1/app/rides/getMyRides', {
             params: {
                 userEmail: user.email
@@ -22,6 +25,7 @@ const Publish = () => {
             .then(res => {
                 setRides(res.data.rides)
                 console.log(res);
+                setloader(false)
             })
             .catch(err => {
                 console.log(err);
@@ -38,14 +42,21 @@ const Publish = () => {
                 </div>
                 <div className="text-center w-100">
                     {
-                        rides.length === 0 ?
-                            <p className='fs-2 fw-bold'>No rides yet. Share a ride?</p>
+                        loader ?
+                            <div className='d-flex flex-column align-items-center'>
+                                <LeapFrog />
+                            </div>
                             :
-                            rides.slice().reverse().map(ride => {
-                                return (
-                                    <PublishItem ride={ride} type="published" />
-                                )
-                            })
+                            (
+                                rides.length === 0 ?
+                                    <p className='fs-2 fw-bold'>No rides yet. Share a ride?</p>
+                                    :
+                                    rides.slice().reverse().map(ride => {
+                                        return (
+                                            <PublishItem ride={ride} type="published" />
+                                        )
+                                    })
+                            )
                     }
                 </div>
             </div>
