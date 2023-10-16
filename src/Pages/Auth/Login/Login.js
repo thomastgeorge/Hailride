@@ -90,8 +90,9 @@ const Login = ({ setauthenticated }) => {
 
     return (
         <div className='d-flex justify-content-center align-items-center' style={{ height: '100vh', width: '100vw' }}>
-            <div className='rounded-3 p-4 d-flex flex-column align-items-center' style={{ backgroundColor: "#dede28cf", boxShadow: "rgb(121 121 121 / 28%) 6px 6px 13px 1px" }}>
-                {/* <img className="m-4 mb-2" src="/tiei.png" style={{ width: "50%" }} /> */}
+            <div className='rounded-3 mx-3 pb-4 d-flex flex-column align-items-center' style={{ backgroundColor: "#8cd9a1", boxShadow: "rgb(121 121 121 / 28%) 6px 6px 13px 1px" }}>
+            <img className="rounded" src="https://mail.google.com/mail/u/0/?ui=2&ik=ecb4c85736&attid=0.1&permmsgid=msg-f:1779845247885734027&th=18b347d2ab65708b&view=fimg&realattid=f_lnrrntll0&disp=thd&attbid=ANGjdJ9_nWN1Aody30oXT9gWFrsthKcrTqeOHj83_290RJkIvqyK87dv-Z33lSGbeKj0DkH0oQfijld4CdE6SbMm0X6xjCXDAtVnePLcIAiDweyd9EB2urIMuS9Gxjg&ats=2524608000000&sz=w1920-h857"
+                    style={{ width: "100%" }} />
                 {/* <b className='h1 fw-bold py-3 pb-2'><i>Assign Me</i></b> */}
                 <img src="logo-phase2.png" height="50px" className='my-3' />
                 {

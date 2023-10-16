@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import PublishItem from '../../Components/PublishItem/PublishItem'
+import { LocationIcon } from '@primer/octicons-react'
 
 const SearchResult = () => {
 
@@ -16,9 +17,9 @@ const SearchResult = () => {
         <div className="p-2">
             <div className="d-flex rounded-3 p-2" style={{ backgroundColor: "#8cd9a1" }}>
                 <div className="w-75 p-1 pe-3">
-                    <b>📌 {loc.state.from}</b>
+                    <b><LocationIcon size={18} /> {loc.state.from}</b>
                     <hr></hr>
-                    <b>📌 {loc.state.to}</b>
+                    <b><LocationIcon size={18} /> {loc.state.to}</b>
                 </div>
                 <div className="w-25 text-white d-flex flex-column align-items-center bg-black p-2 rounded-3">
                     <b style={{ fontSize: "16px" }}>{dateComponents[2]}</b>
@@ -34,7 +35,7 @@ const SearchResult = () => {
                         :
                         loc.state.rides.map(ride => {
                             return (
-                                <PublishItem ride={ride} />
+                                <PublishItem ride={ride} type="hail"/>
                             )
                         })
                 }

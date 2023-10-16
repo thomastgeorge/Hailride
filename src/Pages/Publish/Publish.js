@@ -31,22 +31,23 @@ const Publish = () => {
 
     return (
         <>
-            <div className='p-2'>
+            <div className='p-3'>
                 <div onClick={() => setOpen(true)} className='btn d-flex justify-content-center btn-danger align-items-center w-100 mb-4 py-2'>
                     <PlusIcon size={30} />
                     <b className='ms-2'>Publish new ride</b>
                 </div>
-                {
-                    rides.length === 0 ?
-                        <div><b className='fs-5 ms-3'>No Rides yet!</b></div>
-                        :
-                        rides.slice().reverse().map(ride => {
-                            return (
-                                <PublishItem ride={ride} />
-                            )
-                        })
-                }
-
+                <div className="text-center w-100">
+                    {
+                        rides.length === 0 ?
+                            <p className='fs-2 fw-bold'>No rides yet. Share a ride?</p>
+                            :
+                            rides.slice().reverse().map(ride => {
+                                return (
+                                    <PublishItem ride={ride} type="published" />
+                                )
+                            })
+                    }
+                </div>
             </div>
             <AddItem open={open} setOpen={setOpen} />
         </>

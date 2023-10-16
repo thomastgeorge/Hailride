@@ -1,9 +1,27 @@
-import React, { useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Axios } from '../../Config/Axios/Axios'
+import { EllipsisIcon } from '@primer/octicons-react'
+import { UserContext } from '../../App'
 
-const PublishItem = ({ ride }) => {
+const PublishItem = ({ ride, type }) => {
 
     const [deleteSection, setDeleteSection] = useState(false)
+    const [userDetails, setuserDetails] = useState(null)
+
+    const { user } = useContext(UserContext)
+
+    useEffect(() => {
+        Axios.get('/api/v1/app/rides/getUserDetails', {
+            params: {
+                email: ride.addedByEmail
+            }
+        })
+            .then(res => {
+                console.log(res.data.user);
+                setuserDetails(res.data.user)
+            })
+    }, [])
+
 
     const cancelRide = () => {
         Axios.delete('/api/v1/app/rides/deleteRide', {
@@ -19,8 +37,21 @@ const PublishItem = ({ ride }) => {
             })
     }
 
+    const hailRide = () => {
+        Axios.put('/api/v1/app/rides/hailRide', {
+            rideId: ride.rideId,
+            email: user.email
+        })
+            .then(res => {
+                window.location.reload()
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    }
+
     return (
-        <div className="rounded my-2" style={{ backgroundColor: '#60D3AA' }}>
+        <div className="rounded my-2" style={{ backgroundColor: '#8cd9a1' }}>
             <div className="p-3" onClick={() => setDeleteSection(!deleteSection)}>
                 <div className='d-flex text-white'>
                     <div className='pe-2'>
@@ -51,12 +82,35 @@ const PublishItem = ({ ride }) => {
                 </div>
             </div>
             {
-                deleteSection &&
-                <div className="p-2 pt-2 d-flex rounded" style={{ justifyContent: "right", backgroundColor: "#1c104154" }}>
+                (deleteSection && type === "published") &&
+                < div className="p-2 pt-2 d-flex rounded" style={{ justifyContent: "right", backgroundColor: "#1c104154" }}>
                     <div className="btn btn-danger" onClick={cancelRide}>Cancel Ride</div>
                 </div>
             }
-        </div>
+            {
+                (deleteSection && (type === "hail" || type === "hailed")) &&
+                <div className="p-2 pt-2 d-flex justify-content-between rounded" style={{ backgroundColor: "#1c104154" }}>
+                    <div className="p-2 rounded text-start">
+                        <b>Vehicle Details</b>
+                        <div className="d-flex gap-2">
+                            <EllipsisIcon size={20} />
+                            {userDetails?.vehicleDetails?.number}
+                        </div>
+                        <div className="d-flex gap-2">
+                            <EllipsisIcon size={20} />
+                            {userDetails?.vehicleDetails?.model}
+                        </div>
+                    </div>
+                    {
+                        type === "hailed" &&
+                        <div className="d-flex align-items-center">
+                            <div className="btn btn-danger px-5" onClick={hailRide}>Hail</div>
+                        </div>
+                    }
+
+                </div>
+            }
+        </div >
     )
 }
 
