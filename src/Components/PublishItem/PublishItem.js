@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { Axios } from '../../Config/Axios/Axios'
 import { EllipsisIcon } from '@primer/octicons-react'
 import { UserContext } from '../../App'
+import { useNavigate } from 'react-router-dom'
 
 const PublishItem = ({ ride, type }) => {
 
@@ -9,6 +10,8 @@ const PublishItem = ({ ride, type }) => {
     const [userDetails, setuserDetails] = useState(null)
 
     const { user } = useContext(UserContext)
+
+    const nav = useNavigate()
 
     useEffect(() => {
         Axios.get('/api/v1/app/rides/getUserDetails', {
@@ -36,6 +39,19 @@ const PublishItem = ({ ride, type }) => {
                 console.log(err);
             })
     }
+    const updateRideStatus = (val) => {
+        Axios.put('/api/v1/app/rides/updateRideStatus', {
+            rideId: ride.rideId,
+            status: val
+        })
+            .then(res => {
+                console.log(res);
+                window.location.reload()
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    }
 
     const hailRide = () => {
         Axios.put('/api/v1/app/rides/hailRide', {
@@ -43,7 +59,7 @@ const PublishItem = ({ ride, type }) => {
             email: user.email
         })
             .then(res => {
-                window.location.reload()
+                nav('/myRides')
             })
             .catch(err => {
                 console.log(err);
@@ -82,9 +98,16 @@ const PublishItem = ({ ride, type }) => {
                 </div>
             </div>
             {
-                (deleteSection && type === "published") &&
-                < div className="p-2 pt-2 d-flex rounded" style={{ justifyContent: "right", backgroundColor: "#1c104154" }}>
+                (deleteSection && type === "published" && ride.status === "") &&
+                < div className="p-2 pt-2 d-flex rounded gap-2" style={{ justifyContent: "right", backgroundColor: "#1c104154" }}>
+                    <div className="btn btn-success" onClick={() => updateRideStatus("started")}>Started</div>
                     <div className="btn btn-danger" onClick={cancelRide}>Cancel Ride</div>
+                </div>
+            }
+            {
+                (deleteSection && type === "published" && ride.status === "started") &&
+                < div className="p-2 pt-2 d-flex rounded gap-2" style={{ justifyContent: "right", backgroundColor: "#1c104154" }}>
+                    <div className="btn btn-danger" onClick={() => updateRideStatus("ended")}>End Ride</div>
                 </div>
             }
             {
@@ -102,7 +125,7 @@ const PublishItem = ({ ride, type }) => {
                         </div>
                     </div>
                     {
-                        type === "hailed" &&
+                        type === "hail" &&
                         <div className="d-flex align-items-center">
                             <div className="btn btn-danger px-5" onClick={hailRide}>Hail</div>
                         </div>

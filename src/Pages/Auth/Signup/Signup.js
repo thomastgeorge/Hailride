@@ -74,7 +74,7 @@ const Signup = () => {
     return (
         <div className='d-flex justify-content-center align-items-center' style={{ height: '100vh', width: '100vw' }}>
             <div className='rounded-3 mx-3 pb-4 d-flex flex-column align-items-center' style={{ backgroundColor: "#8cd9a1", boxShadow: "rgb(121 121 121 / 28%) 6px 6px 13px 1px" }}>
-                <img className="rounded" src="mainPage.jpg"
+                <img className="rounded" src="login.jpg"
                     style={{ width: "100%" }} />
                 {/* <b className='h1 fw-bold mb-3 py-3'><i>Assign Me</i></b> */}
                 <div className="p-3 pt-0 d-flex flex-column align-items-center">

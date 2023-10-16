@@ -63,7 +63,7 @@ const Search = () => {
 
     return (
         <>
-            <div className='p-2'>
+            <div className='p-2 pt-4'>
                 <div className='d-flex flex-column align-items-center'>
                     <b style={{ fontSize: "32px" }}>Hail your Ride!</b>
                     <img src="mainPage.jpg" style={{ width: 'calc( 100vw - 20px )' }} />
