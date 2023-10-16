@@ -6,7 +6,8 @@ const SearchLocation = ({ open, setOpen, setLocation }) => {
 
     const [searchValue, setSearchValue] = useState("")
 
-    const [locations, setlocations] = useState(['Kengeri', 'Marthahalli', 'Provident', 'KR Market', 'Hebbal', 'WhiteFeild', 'Electronic City', 'MG Road', 'Lal Bhag', 'Kumbalgodu', 'Kormangala', 'Indira Nagar', 'RR Nagar', 'JP Nagar', 'Bannerghatta'])
+    const [locations, setlocations] = useState(['Kengeri', 'Marthahalli', 'Provident Sunworth', 'KR Market', 'Hebbal', 'WhiteField', 'Electronic City', 'MG Road', 'Lal Bhag', 'Kumbalgodu', 'Kormangala', 'Indira Nagar', 'RR Nagar', 'JP Nagar', 'Bannerghatta',
+'Kanmanike', 'Yelahanka', 'Christ University', 'Mysore', 'Bidadi', 'Yeshwantpur', 'J Nagar', 'Kengeri Metro', 'Majestic', 'Jigani', 'Mysore Road', 'Kalyan Nagar', 'Rajaji Nagar', 'Nagasandra', 'Silk Institute', 'RR Medical College'])
 
     const [loading, setLoading] = useState(false);
     const showModal = () => {
