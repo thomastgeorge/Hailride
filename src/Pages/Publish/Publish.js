@@ -51,7 +51,7 @@ const Publish = () => {
                                 rides.length === 0 ?
                                     <p className='fs-2 fw-bold'>No rides yet. Share a ride?</p>
                                     :
-                                    rides.slice().reverse().map(ride => {
+                                    rides.slice().reverse().filter(ride => ride.status != "ended").map(ride => {
                                         return (
                                             <PublishItem ride={ride} type="published" />
                                         )
@@ -59,6 +59,18 @@ const Publish = () => {
                             )
                     }
                 </div>
+                <div className='d-flex'>
+                    <div className='w-25'><hr /></div>
+                    <b className='text-black text-nowrap mx-3'>Past Rides</b>
+                    <div className='w-100'><hr /></div>
+                </div>
+                {
+                    rides.slice().reverse().filter(ride => ride.status === "ended").map(ride => {
+                        return (
+                            <PublishItem ride={ride} type="published" />
+                        )
+                    })
+                }
             </div>
             <AddItem open={open} setOpen={setOpen} />
         </>
