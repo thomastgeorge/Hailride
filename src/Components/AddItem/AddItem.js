@@ -47,7 +47,7 @@ const AddItem = ({ open, setOpen }) => {
 
     const handleOk = () => {
         setLoading(true);
-        if (!from && !to && !starts && !ends && !rideDate && !rate && !passengers) {
+        if (!from || !to || !starts || !ends || !rideDate || !rate || !passengers) {
             setvalid(false)
             setLoading(false)
             return

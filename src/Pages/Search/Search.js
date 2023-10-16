@@ -2,6 +2,9 @@ import { BookmarkFillIcon, CalendarIcon, DuplicateIcon, PersonFillIcon, PersonIc
 import React, { useState } from 'react'
 import SearchLocation from '../../Components/SearchLocation/SearchLocation'
 import { useNavigate } from 'react-router-dom'
+import { Axios } from '../../Config/Axios/Axios'
+import { Spin } from 'antd'
+import { DotSpinner, LeapFrog } from '@uiball/loaders'
 
 const Search = () => {
 
@@ -15,6 +18,8 @@ const Search = () => {
 
     const nav = useNavigate()
 
+    const [loader, setloader] = useState(false)
+
     const setLocation = (loc) => {
         open === 'from' ?
             setFrom(loc)
@@ -23,10 +28,37 @@ const Search = () => {
     }
 
     const searchRides = () => {
-        from && to && date && passengers ?
-            nav('/searchResult')
-            :
+        setloader(true)
+        if (!from || !to || !date || !passengers) {
             setvalid(false)
+            setloader(false)
+            return
+        }
+
+        Axios.get('/api/v1/app/rides/getRides', {
+            params: {
+                from: from,
+                to: to,
+                date: date,
+                passengers: passengers
+            }
+        })
+            .then(res => {
+                setloader(false)
+                nav('/searchResult', {
+                    state: {
+                        from: from,
+                        to: to,
+                        date: date,
+                        rides: res.data.rides
+                    }
+                })
+                console.log(res);
+            })
+            .catch(err => {
+                console.log(err);
+                setloader(false)
+            })
     }
 
     return (
@@ -74,7 +106,12 @@ const Search = () => {
                         </div>
                     </div>
                     <div onClick={searchRides} className='p-2 py-3 btn d-flex justify-content-center bg-black' style={{ borderTopLeftRadius: "0px", borderTopRightRadius: "0px" }}>
-                        <b className="text-white fs-5">Search</b>
+                        {
+                            loader ?
+                                <LeapFrog color="white" />
+                                :
+                                <b className="text-white fs-5">Search</b>
+                        }
                     </div>
                 </div>
             </div>
