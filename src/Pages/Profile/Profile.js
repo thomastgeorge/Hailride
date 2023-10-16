@@ -268,7 +268,7 @@ const Profile = () => {
                 </div>
             </div>
 
-            <div onClick={signOut} className='mt-3 btn btn-danger w-100 rounded-3 text-white'><b>Signout</b></div>
+            <div onClick={signOut} className='my-3 btn btn-danger w-100 rounded-3 text-white'><b>Signout</b></div>
 
         </div>
     )
