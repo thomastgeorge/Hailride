@@ -14,6 +14,7 @@ import AdminRequests from '../Pages/Admin/AdminRequests/AdminRequests'
 import { Axios } from '../Config/Axios/Axios'
 import Search from '../Pages/Search/Search'
 import Publish from '../Pages/Publish/Publish'
+import SearchResult from '../Pages/SearchResult/SearchResult'
 
 const Home = () => {
 
@@ -44,6 +45,7 @@ const Home = () => {
 
                             <Route path="/search" element={<Search />} />
                             <Route path="/publish" element={<Publish />} />
+                            <Route path="/searchResult" element={<SearchResult />} />
                             <Route path="/*" element={<Search />} />
                         </>
 
