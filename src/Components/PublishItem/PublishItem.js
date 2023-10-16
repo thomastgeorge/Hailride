@@ -20,7 +20,7 @@ const PublishItem = ({ ride }) => {
     }
 
     return (
-        <div className="rounded my-2" style={{ backgroundColor: 'rgb(140, 217, 161)' }}>
+        <div className="rounded my-2" style={{ backgroundColor: '#60D3AA' }}>
             <div className="p-3" onClick={() => setDeleteSection(!deleteSection)}>
                 <div className='d-flex text-white'>
                     <div className='pe-2'>
