@@ -102,12 +102,12 @@ const Profile = () => {
     }
 
     return (
-        <div className='p-4 h-100 text-white' style={{ background: "#d5f8e5" }}>
+        <div className='p-4 pb-5 mb-3 h-100 text-white' style={{ background: "#d5f8e5" }}>
             <div className='d-flex p-2 rounded-3 align-items-center' style={{ background: "#000" }}>
                 <div><img src="profile.png" height="100px" width="100px" style={{ borderRadius: "50%" }} /></div>
                 <div className='d-flex flex-column ms-3 text-white justify-content-center'>
-                    <b className='fs-2 m-0 p-0'>{user.name}</b>
-                    <p className='m-0 p-0'><i>{user.email}</i></p>
+                    <b className='fs-2 m-0 p-0'>{user?.name}</b>
+                    <p className='m-0 p-0'><i>{user?.email}</i></p>
                     <p className='m-0 p-0'><i>8527419638</i></p>
                 </div>
             </div>
@@ -135,7 +135,7 @@ const Profile = () => {
                     <div className='d-flex rounded align-items-center gap-3 my-2'>
                         <b className='w-25'>DOB</b>
                         <div className='w-75'>
-                            <input type='date' className='bg-black text-white' value={personalDetails.dob}
+                            <input type='date' className='bg-black text-white' value={personalDetails?.dob}
                                 onChange={e => {
                                     setPersonalDetails({
                                         ...personalDetails,
@@ -150,7 +150,7 @@ const Profile = () => {
                     <div className='d-flex rounded align-items-center gap-3 my-2'>
                         <b className='w-25'>Gender</b>
                         <div className='w-75'>
-                            <input className='bg-black text-white' value={personalDetails.gender}
+                            <input className='bg-black text-white' value={personalDetails?.gender}
                                 onChange={e => {
                                     setPersonalDetails({
                                         ...personalDetails,
@@ -165,7 +165,7 @@ const Profile = () => {
                     <div className='d-flex rounded align-items-center gap-3 my-2'>
                         <b className='w-25'>Address</b>
                         <div className='w-75'>
-                            <textarea className='bg-black text-white' value={personalDetails.address}
+                            <textarea className='bg-black text-white' value={personalDetails?.address}
                                 onChange={e => {
                                     setPersonalDetails({
                                         ...personalDetails,
@@ -191,7 +191,7 @@ const Profile = () => {
                     <div className='d-flex rounded align-items-center gap-3 my-2'>
                         <b className='w-25'>Number</b>
                         <div className='w-75'>
-                            <input className='bg-black text-white' value={vehicleDetails.number}
+                            <input className='bg-black text-white' value={vehicleDetails?.number}
                                 onChange={e => {
                                     setVehicleDetails({
                                         ...vehicleDetails,
@@ -206,7 +206,7 @@ const Profile = () => {
                     <div className='d-flex rounded align-items-center gap-3 my-2'>
                         <b className='w-25'>Model</b>
                         <div className='w-75'>
-                            <input className='bg-black text-white' value={vehicleDetails.model}
+                            <input className='bg-black text-white' value={vehicleDetails?.model}
                                 onChange={e => {
                                     setVehicleDetails({
                                         ...vehicleDetails,
@@ -232,7 +232,7 @@ const Profile = () => {
                     <div className='d-flex rounded align-items-center gap-3 my-2'>
                         <b className='w-25'>Name</b>
                         <div className='w-75'>
-                            <input className='bg-black text-white' value={emergency.name}
+                            <input className='bg-black text-white' value={emergency?.name}
                                 onChange={e => {
                                     setEmergency({
                                         ...emergency,
@@ -247,7 +247,7 @@ const Profile = () => {
                     <div className='d-flex rounded align-items-center gap-3 my-2'>
                         <b className='w-25'>Email</b>
                         <div className='w-75'>
-                            <input className='bg-black text-white' value={emergency.email}
+                            <input className='bg-black text-white' value={emergency?.email}
                                 onChange={e => {
                                     setEmergency({
                                         ...emergency,
