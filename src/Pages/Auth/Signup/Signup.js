@@ -74,55 +74,57 @@ const Signup = () => {
     return (
         <div className='d-flex justify-content-center align-items-center' style={{ height: '100vh', width: '100vw' }}>
             <div className='rounded-3 mx-3 pb-4 d-flex flex-column align-items-center' style={{ backgroundColor: "#8cd9a1", boxShadow: "rgb(121 121 121 / 28%) 6px 6px 13px 1px" }}>
-                <img className="rounded" src="https://mail.google.com/mail/u/0/?ui=2&ik=ecb4c85736&attid=0.1&permmsgid=msg-f:1779845247885734027&th=18b347d2ab65708b&view=fimg&realattid=f_lnrrntll0&disp=thd&attbid=ANGjdJ9_nWN1Aody30oXT9gWFrsthKcrTqeOHj83_290RJkIvqyK87dv-Z33lSGbeKj0DkH0oQfijld4CdE6SbMm0X6xjCXDAtVnePLcIAiDweyd9EB2urIMuS9Gxjg&ats=2524608000000&sz=w1920-h857"
+                <img className="rounded" src="mainPage.jpg"
                     style={{ width: "100%" }} />
                 {/* <b className='h1 fw-bold mb-3 py-3'><i>Assign Me</i></b> */}
-                <img src="logo-phase2.png" height="50px" className='my-3' />
-                {
-                    err !== "" &&
-                    <b className='text-danger mb-2'>{err}</b>
-                }
-                {
-                    success != "" ?
-                        <>
-                            <b className='text-success mb-2'>{success}</b>
-                            <div onClick={() => nav('/login')} className='btn btn-dark w-100 ms-2 mt-3 py-2'>
-                                <b>Continue to Login</b>
-                            </div>
-                        </>
-                        :
-                        <div className="d-flex flex-column align-items-center">
-                            <input style={{ width: "250px", outline: "none", border: "none", background: "#e8f0fe" }} className="rounded-3 m-2 p-2 " type="text" placeholder='Name'
-                                value={name} onChange={(e) => setname(e.target.value)} onKeyDown={handleKeyDown}></input>
-                            <input style={{ width: "250px", outline: "none", border: "none", background: "#e8f0fe" }} className="rounded-3 m-2 p-2 " type="email" placeholder='Email'
-                                value={email} onChange={(e) => setemail(e.target.value)} onKeyDown={handleKeyDown}></input>
-                            <div style={{ width: "250px", background: "#e8f0fe" }} className="d-flex justify-content-between rounded-3 m-2 p-2 pe-3">
-                                <input style={{ outline: "none", border: "none", background: "#e8f0fe" }} type={viewPassword ? "text" : "password"} placeholder='Password' value={pswd} onChange={(e) => setpswd(e.target.value)} onKeyDown={handleKeyDown}></input>
-                                <div onClick={() => setviewPassword(!viewPassword)} className='d-flex me-0 pe-1' style={{ cursor: "pointer", margin: "auto" }} >
-                                    {
-                                        viewPassword ?
-                                            <EyeClosedIcon size={18} />
-                                            :
-                                            <EyeIcon size={18} />
+                <div className="p-3 pt-0 d-flex flex-column align-items-center">
+                    <img src="logo-phase2.png" height="50px" className='my-3' />
+                    {
+                        err !== "" &&
+                        <b className='text-danger mb-2'>{err}</b>
+                    }
+                    {
+                        success != "" ?
+                            <>
+                                <b className='text-success mb-2'>{success}</b>
+                                <div onClick={() => nav('/login')} className='btn btn-dark w-100 ms-2 mt-3 py-2'>
+                                    <b>Continue to Login</b>
+                                </div>
+                            </>
+                            :
+                            <div className="d-flex flex-column align-items-center">
+                                <input style={{ width: "250px", outline: "none", border: "none", background: "#e8f0fe" }} className="rounded-3 m-2 p-2 " type="text" placeholder='Name'
+                                    value={name} onChange={(e) => setname(e.target.value)} onKeyDown={handleKeyDown}></input>
+                                <input style={{ width: "250px", outline: "none", border: "none", background: "#e8f0fe" }} className="rounded-3 m-2 p-2 " type="email" placeholder='Email'
+                                    value={email} onChange={(e) => setemail(e.target.value)} onKeyDown={handleKeyDown}></input>
+                                <div style={{ width: "250px", background: "#e8f0fe" }} className="d-flex justify-content-between rounded-3 m-2 p-2 pe-3">
+                                    <input style={{ outline: "none", border: "none", background: "#e8f0fe" }} type={viewPassword ? "text" : "password"} placeholder='Password' value={pswd} onChange={(e) => setpswd(e.target.value)} onKeyDown={handleKeyDown}></input>
+                                    <div onClick={() => setviewPassword(!viewPassword)} className='d-flex me-0 pe-1' style={{ cursor: "pointer", margin: "auto" }} >
+                                        {
+                                            viewPassword ?
+                                                <EyeClosedIcon size={18} />
+                                                :
+                                                <EyeIcon size={18} />
+                                        }
+                                    </div>
+                                </div>
+                                <div onClick={() => signUp()} className='btn btn-dark w-100 ms-2 mt-3 py-2'>
+                                    {loading ?
+                                        <Ring
+                                            size={20}
+                                            speed={2}
+                                            color="white"
+                                        />
+                                        :
+                                        <b>Signup</b>
                                     }
                                 </div>
+                                <div className='mt-3'>
+                                    <b>Already have account? <span onClick={() => nav('/login')} className='text-danger'>Login</span></b>
+                                </div>
                             </div>
-                            <div onClick={() => signUp()} className='btn btn-dark w-100 ms-2 mt-3 py-2'>
-                                {loading ?
-                                    <Ring
-                                        size={20}
-                                        speed={2}
-                                        color="white"
-                                    />
-                                    :
-                                    <b>Signup</b>
-                                }
-                            </div>
-                            <div className='mt-3'>
-                                <b>Already have account? <span onClick={() => nav('/login')} className='text-danger'>Login</span></b>
-                            </div>
-                        </div>
-                }
+                    }
+                </div>
             </div>
         </div>
     )
