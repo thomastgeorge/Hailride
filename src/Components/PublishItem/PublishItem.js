@@ -138,7 +138,7 @@ const PublishItem = ({ ride, type }) => {
                                                 <span key={index} style={{ fontSize: '15px' }}>⭐</span>
                                             ))
                                         }
-                                        <b>({ride.addedByUserRatingCount})</b>
+                                        <span className='text-white'>({ride.addedByUserRatingCount})</span>
                                     </div>
                                 }
                             </div>
