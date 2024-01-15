@@ -4,9 +4,11 @@ import { EllipsisIcon } from '@primer/octicons-react'
 import { UserContext } from '../../App'
 import { useNavigate } from 'react-router-dom'
 import { DotSpinner } from '@uiball/loaders'
+import { Rating } from 'react-simple-star-rating'
 
 
 const PublishItem = ({ ride, type }) => {
+
 
     const [deleteSection, setDeleteSection] = useState(false)
     const [userDetails, setuserDetails] = useState(null)
@@ -17,6 +19,24 @@ const PublishItem = ({ ride, type }) => {
 
     const nav = useNavigate()
 
+    const [rating, setRating] = useState(ride.rating) // initial rating value
+
+    // Catch Rating value
+    const handleRating = (rate) => {
+        setRating(rate)
+        Axios.put('/api/v1/app/rides/updateRating', {
+            rideId: ride.rideId,
+            rating: rate,
+            addedByEmail: ride.addedByEmail
+        })
+            .then(res => {
+                console.log(res);
+                window.location.reload()
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    }
     useEffect(() => {
         Axios.get('/api/v1/app/rides/getUserDetails', {
             params: {
@@ -30,8 +50,7 @@ const PublishItem = ({ ride, type }) => {
     }, [])
 
     const emergencySOS = () => {
-        if (window.confirm("Are you sure, you want to active SOS ?"))
-        {
+        if (window.confirm("Are you sure, you want to active SOS ?")) {
             setloader(true);
             Axios.post('/api/v1/app/rides/emergencySOS', {
                 rider: userDetails,
@@ -106,9 +125,24 @@ const PublishItem = ({ ride, type }) => {
                     </div>
                 </div>
                 <div className='d-flex align-items-center justify-content-between'>
-                    <div>
+                    <div className='d-flex'>
                         <img className='rounded-circle' style={{ height: "40px", width: "40px", objectFit: "cover" }} src="https://img.freepik.com/free-photo/serious-surprised-attractive-man-holds-chin-looks-with-widely-opened-eyes-camera-wears-casual-sweater-listens-with-shocked-expression_273609-24440.jpg?w=900&t=st=1697382980~exp=1697383580~hmac=d5d10c6bf1c11ec8dd0dbf63f6b71321d6b27f5387d00447d3f6722950e517a0" />
-                        <b className="text-white ms-2">{ride.addedBy}</b>
+                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', marginLeft: '10px' }}>
+                            <b className="text-white ms-2">{ride.addedBy}</b>
+                            <div>
+                                {
+                                    ride.status === "" && type === "hail" &&
+                                    <div>
+                                        {
+                                            Array.from({ length: ride.addedByUserRating }).map((_, index) => (
+                                                <span key={index} style={{ fontSize: '15px' }}>⭐</span>
+                                            ))
+                                        }
+                                        <b>({ride.addedByUserRatingCount})</b>
+                                    </div>
+                                }
+                            </div>
+                        </div>
                     </div>
                     <div className="d-flex gap-3">
                         <div className="p-2 bg-white text-black rounded">
@@ -162,8 +196,35 @@ const PublishItem = ({ ride, type }) => {
                             }
                         </div>
                     }
-
-
+                </div>
+            }
+            {
+                (ride.status === 'ended' && type === 'ended') &&
+                <div className="d-flex align-items-center">
+                    {
+                        ride.rating > 0 ?
+                            (
+                                < div className="bg-success p-2 text-white rounded px-5 w-100 d-flex align-items-center justify-content-between" >
+                                    <b>You have rated  {ride.rating}/5</b>
+                                </div>
+                            )
+                            :
+                            (
+                                <div className="bg-success p-2 text-white rounded px-5 w-100 d-flex align-items-center justify-content-between" >
+                                    <b>Rate your ride</b>
+                                    <Rating
+                                        onClick={handleRating}
+                                        ratingValue={rating}
+                                        size={24}
+                                        label
+                                        transition
+                                        fillColor='orange'
+                                        emptyColor='gray'
+                                        className='foo'
+                                    />
+                                </div>
+                            )
+                    }
                 </div>
             }
         </div >

@@ -4,6 +4,7 @@ import { CircleSlashIcon, NoteIcon, PersonFillIcon } from '@primer/octicons-reac
 import { Axios } from '../../Config/Axios/Axios';
 import { UserContext } from '../../App';
 import SearchLocation from '../SearchLocation/SearchLocation';
+import { Rating } from 'react-simple-star-rating';
 
 const AddItem = ({ open, setOpen }) => {
 
@@ -61,7 +62,9 @@ const AddItem = ({ open, setOpen }) => {
             ends: ends,
             rideDate: rideDate,
             rate: rate,
-            passengers: passengers
+            passengers: passengers,
+            addedByUserRating: user.rating,
+            addedByUserRatingCount: user.ratingCount,
         })
             .then(res => {
                 setOpen(false);
