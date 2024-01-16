@@ -110,6 +110,18 @@ const Profile = () => {
                     <p className='m-0 p-0'><i>{user?.email}</i></p>
                     <p className='m-0 p-0'><i>8527419638</i></p>
                 </div>
+
+            </div>
+            <div className='bg-black p-2 d-flex justify-content-between rounded mt-1'>
+                <b>Rating</b>
+                <div>
+                    {
+                        Array.from({ length: user.rating }).map((_, index) => (
+                            <span key={index} style={{ fontSize: '15px' }}>⭐</span>
+                        ))
+                    }
+                    <span className='text-white'>({user.ratingCount})</span>
+                </div>
             </div>
             <div onClick={() => nav('/myRides')} className="btn btn-danger w-100 py-2 my-2">
                 <b>My Rides</b>
