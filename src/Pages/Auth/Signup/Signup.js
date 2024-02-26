@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Axios } from '../../../Config/Axios/Axios'
 import { EyeIcon, EyeClosedIcon } from '@primer/octicons-react'
 import { Ring } from '@uiball/loaders'
@@ -8,32 +8,17 @@ const Signup = () => {
     const [name, setname] = useState("")
     const [email, setemail] = useState("")
     const [pswd, setpswd] = useState("")
+    const [regno, setregno] = useState("")
+    const [regnoMessage, setregnoMessage] = useState("")
+    const [regnoMessageColor, setregnoMessageColor] = useState(false)
+    const [emailMessage, setemailMessage] = useState("")
+    const [emailMessageColor, setemailMessageColor] = useState(false)
     const [loading, setloading] = useState(false)
     const [viewPassword, setviewPassword] = useState(false)
     const [err, seterr] = useState("")
     const [success, setsuccess] = useState("")
 
     const nav = useNavigate()
-
-    // useEffect(() => {
-    //     console.log(sessionStorage.getItem("token"));
-    //     if (sessionStorage.getItem("token") != null) {
-    //         Axios.post("auth/verifyToken", {
-    //             token: sessionStorage.getItem("token")
-    //         })
-    //             .then((res) => {
-    //                 console.log(res?.data.user.data)
-    //                 if (res?.data?.user?.data.employeeId != null)
-    //                     setUser(res.data.user.data)
-    //             })
-    //             .catch((err) => {
-    //                 console.log(err);
-    //                 seterr("Session Expired! login again...")
-    //                 sessionStorage.removeItem("token")
-    //             })
-    //     }
-    // }, [])
-
 
     const signUp = async () => {
         setloading(true)
@@ -45,6 +30,7 @@ const Signup = () => {
                 name: name,
                 email: email.toLowerCase(),
                 password: pswd,
+                regno: regno,
             }),
             headers: {
                 "Content-type": "application/json; charset=UTF-8"
@@ -71,6 +57,53 @@ const Signup = () => {
             signUp();
         }
     }
+
+    const validateEmail = () => {
+        var re1 = /^(?![\S]*\d)[\S*a-z\.]+[@]christuniversity\.in/g;    //faculty
+        var re2 = /^(?![\S]*\d)[\S*a-z\.]+[@][a-z\.]+[\.]christuniversity\.in/g;    //students
+        if(re1.test(email) || re2.test(email)){
+            setemailMessage("Valid Email")
+            setemailMessageColor(true)
+        }
+        else if(email === ""){
+            setemailMessage("")
+        }
+        else{
+            setemailMessage("Invalid Email: Enter college email")
+            setemailMessageColor(false)
+        }
+    }
+
+    const validateRegno = () => {
+        var re = /^\d+$/g
+        if(re.test(regno)){
+            if((/^(?![\S]*\d)[\S*a-z\.]+[@]christuniversity\.in/g).test(email) && regno.length === 4){
+                setregnoMessage("Valid registration number")
+                setregnoMessageColor(true)
+            }
+            else if((/^(?![\S]*\d)[\S*a-z\.]+[@][a-z]+[\.]christuniversity\.in/g).test(email) && regno.length === 7){
+            setregnoMessage("Valid registration number")
+            setregnoMessageColor(true)
+            }
+            else if (email !== ""){
+                setregnoMessage("Invalid registration number")
+                setregnoMessageColor(false)
+            }
+        }
+        else if(regno === ""){
+            setregnoMessage("")
+        }
+        else {
+            setregnoMessage("Invalid registration number")
+            setregnoMessageColor(false)
+        }
+    }
+
+    useEffect(() => {
+        validateEmail();
+        validateRegno();
+    }, [email, regno]);
+
     return (
         <div className='d-flex justify-content-center align-items-center' style={{ height: '100vh', width: '100vw' }}>
             <div className='rounded-3 mx-3 pb-4 d-flex flex-column align-items-center' style={{ backgroundColor: "#8cd9a1", boxShadow: "rgb(121 121 121 / 28%) 6px 6px 13px 1px" }}>
@@ -95,8 +128,12 @@ const Signup = () => {
                             <div className="d-flex flex-column align-items-center">
                                 <input style={{ width: "250px", outline: "none", border: "none", background: "#e8f0fe" }} className="rounded-3 m-2 p-2 " type="text" placeholder='Name'
                                     value={name} onChange={(e) => setname(e.target.value)} onKeyDown={handleKeyDown}></input>
-                                <input style={{ width: "250px", outline: "none", border: "none", background: "#e8f0fe" }} className="rounded-3 m-2 p-2 " type="email" placeholder='Email'
+                                <input style={{ width: "250px", outline: "none", border: "none", background: "#e8f0fe" }} className="rounded-3 m-2 p-2 " type="email" placeholder='College email'
                                     value={email} onChange={(e) => setemail(e.target.value)} onKeyDown={handleKeyDown}></input>
+                                <div className={emailMessageColor ? 'text-sm' : 'text-danger text-sm'}>{emailMessage}</div>
+                                <input style={{ width: "250px", outline: "none", border: "none", background: "#e8f0fe" }} className="rounded-3 m-2 p-2 " type="text" placeholder='Registration Number'
+                                    value={regno} onChange={(e) => setregno(e.target.value)} onKeyDown={handleKeyDown} ></input>
+                                <div className={regnoMessageColor ? 'text-sm' : 'text-danger text-sm'}>{regnoMessage}</div>
                                 <div style={{ width: "250px", background: "#e8f0fe" }} className="d-flex justify-content-between rounded-3 m-2 p-2 pe-3">
                                     <input style={{ outline: "none", border: "none", background: "#e8f0fe" }} type={viewPassword ? "text" : "password"} placeholder='Password' value={pswd} onChange={(e) => setpswd(e.target.value)} onKeyDown={handleKeyDown}></input>
                                     <div onClick={() => setviewPassword(!viewPassword)} className='d-flex me-0 pe-1' style={{ cursor: "pointer", margin: "auto" }} >
