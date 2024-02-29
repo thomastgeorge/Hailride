@@ -17,6 +17,17 @@ const PublishItem = ({ ride, type }) => {
 
     const { user } = useContext(UserContext)
 
+    const [email, setemail] = useState(user.email)
+    const [name, setname] = useState(user.name)
+    const [gender, setgender] = useState(user.personalDetails?.gender)
+    const [passengerDetails, setpassengerDetails] = useState({
+        email: email,
+        name: name,
+        gender: gender
+    })
+    
+    const [passengers, setPassengers] = useState(ride.passengers)
+
     const nav = useNavigate()
 
     const [rating, setRating] = useState(ride.rating) // initial rating value
@@ -96,7 +107,7 @@ const PublishItem = ({ ride, type }) => {
     const hailRide = () => {
         Axios.put('/api/v1/app/rides/hailRide', {
             rideId: ride.rideId,
-            email: user.email
+            passengerDetails: passengerDetails
         })
             .then(res => {
                 nav('/myRides')
@@ -105,6 +116,25 @@ const PublishItem = ({ ride, type }) => {
                 console.log(err);
             })
     }
+
+    useEffect(() => {
+        Axios.get('/api/v1/app/rides/getPassengerDetails', {
+            params: {
+                rideId: ride.rideId
+            }
+        })
+            .then(res => {
+                setPassengers(res.data.hailedBy)
+                console.log("passenger details start");
+                console.log(res.data.hailedBy.name);
+                console.log(res.data.hailedBy);
+                console.log("passenger details end");
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    }, [])
+    
 
     return (
         <div className="rounded my-2" style={{ backgroundColor: '#8cd9a1' }}>
@@ -167,7 +197,27 @@ const PublishItem = ({ ride, type }) => {
             }
             {
                 (deleteSection && (type === "hail" || type === "hailed")) &&
-                <div className="p-2 pt-2 d-flex justify-content-between rounded" style={{ backgroundColor: "#1c104154" }}>
+                <div className="d-flex justify-content-between rounded " style={{ backgroundColor: "#1c104154" }}>
+                    <div className="d-flex flex-column text-start">
+                        
+                        <div>
+                            {passengers.length > 0 && (
+                            <div>
+                            <h6> Passenger Name   Gender:</h6>
+                            <ul>
+                                {passengers.map((passenger, index) => (
+                                <li key={index}>
+                                
+                                <p>{passenger.name} - {passenger.gender}</p>
+                                </li>
+                                ))}
+                            </ul>
+                            </div>
+                            )}
+                            {passengers.length === 0 && <p>No passenger details available</p>}
+                        </div>
+                        
+                    </div>
                     <div className="p-2 rounded text-start">
                         <b>Vehicle Details</b>
                         <div className="d-flex gap-2" style={{ textWrap: "nowrap" }}>
