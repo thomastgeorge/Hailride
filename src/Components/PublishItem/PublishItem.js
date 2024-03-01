@@ -5,6 +5,7 @@ import { UserContext } from '../../App'
 import { useNavigate } from 'react-router-dom'
 import { DotSpinner } from '@uiball/loaders'
 import { Rating } from 'react-simple-star-rating'
+import PDetails from '../passengerDetails/pDetails'
 
 
 const PublishItem = ({ ride, type }) => {
@@ -25,8 +26,6 @@ const PublishItem = ({ ride, type }) => {
         name: name,
         gender: gender
     })
-    
-    const [passengers, setPassengers] = useState(ride.passengers)
 
     const nav = useNavigate()
 
@@ -115,26 +114,7 @@ const PublishItem = ({ ride, type }) => {
             .catch(err => {
                 console.log(err);
             })
-    }
-
-    useEffect(() => {
-        Axios.get('/api/v1/app/rides/getPassengerDetails', {
-            params: {
-                rideId: ride.rideId
-            }
-        })
-            .then(res => {
-                setPassengers(res.data.hailedBy)
-                console.log("passenger details start");
-                console.log(res.data.hailedBy.name);
-                console.log(res.data.hailedBy);
-                console.log("passenger details end");
-            })
-            .catch(err => {
-                console.log(err);
-            })
-    }, [])
-    
+    }    
 
     return (
         <div className="rounded my-2" style={{ backgroundColor: '#8cd9a1' }}>
@@ -184,41 +164,29 @@ const PublishItem = ({ ride, type }) => {
             </div>
             {
                 (deleteSection && type === "published" && ride.status === "") &&
-                < div className="p-2 pt-2 d-flex rounded gap-2" style={{ justifyContent: "right", backgroundColor: "#1c104154" }}>
-                    <div className="btn btn-success" onClick={() => updateRideStatus("started")}>Started</div>
-                    <div className="btn btn-danger" onClick={cancelRide}>Cancel Ride</div>
+                < div  style={{ justifyContent: "right", backgroundColor: "#1c104154" }}>
+                     <PDetails ride={ride} />
+                     < div className="p-2 pt-2 d-flex rounded gap-2" style={{ justifyContent: "right" }}>
+                    <div className="btn btn-success p-2 pt-2 rounded gap-2" onClick={() => updateRideStatus("started")}>Started</div>
+                    <div className="btn btn-danger p-2 pt-2 rounded gap-2" onClick={cancelRide}>Cancel Ride</div>
+                    </div>
                 </div>
             }
             {
                 (deleteSection && type === "published" && ride.status === "started") &&
-                < div className="p-2 pt-2 d-flex rounded gap-2" style={{ justifyContent: "right", backgroundColor: "#1c104154" }}>
-                    <div className="btn btn-danger" onClick={() => updateRideStatus("ended")}>End Ride</div>
+                < div  style={{ justifyContent: "right", backgroundColor: "#1c104154" }}>
+                    <PDetails ride={ride} />
+                    < div className="p-2 pt-2 d-flex rounded gap-2" style={{ justifyContent: "right" }}>
+                    <div className="btn btn-danger p-2 pt-2 rounded gap-2"  onClick={() => updateRideStatus("ended")}>End Ride</div>
+                    </div>
                 </div>
             }
             {
                 (deleteSection && (type === "hail" || type === "hailed")) &&
-                <div className="d-flex justify-content-between rounded " style={{ backgroundColor: "#1c104154" }}>
-                    <div className="d-flex flex-column text-start">
-                        
-                        <div>
-                            {passengers.length > 0 && (
-                            <div>
-                            <h6> Passenger Name   Gender:</h6>
-                            <ul>
-                                {passengers.map((passenger, index) => (
-                                <li key={index}>
-                                
-                                <p>{passenger.name} - {passenger.gender}</p>
-                                </li>
-                                ))}
-                            </ul>
-                            </div>
-                            )}
-                            {passengers.length === 0 && <p>No passenger details available</p>}
-                        </div>
-                        
-                    </div>
-                    <div className="p-2 rounded text-start">
+                <div  style={{ backgroundColor: "#1c104154" }}>
+                    <PDetails ride={ride} />
+                    <div className="p-2 d-flex rounded gap-2  justify-content-between " >
+                    <div className="p-2 rounded text-start flex-column d-flex">
                         <b>Vehicle Details</b>
                         <div className="d-flex gap-2" style={{ textWrap: "nowrap" }}>
                             <EllipsisIcon size={20} />
@@ -231,22 +199,23 @@ const PublishItem = ({ ride, type }) => {
                     </div>
                     {
                         type === "hail" &&
-                        <div className="d-flex align-items-center">
+                        <div className="d-flex align-items-center justify-content-between  " >
                             <div className="btn btn-danger px-5" onClick={hailRide}>Hail</div>
                         </div>
-                    }
+                    }                
                     {
                         type === "hailed" && ride.status === "started" &&
-                        <div className="d-flex align-items-center">
+                        <div className="d-flex rounded p-3">
                             {
                                 loader ?
                                     <DotSpinner />
                                     :
-                                    <div className="btn btn-danger px-5" onClick={emergencySOS}>Emergency SOS</div>
+                                    <div className="btn btn-danger px-2 py-3" onClick={emergencySOS}>Emergency SOS</div>
                             }
                         </div>
                     }
-                </div>
+                    </div>
+                    </div>
             }
             {
                 (ride.status === 'ended' && type === 'ended') &&

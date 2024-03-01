@@ -20,7 +20,7 @@ const MyRides = () => {
         })
             .then(res => {
                 setRides(res.data.rides)
-                console.log(res);
+                console.log(res.data.rides);
                 setloader(false)
             })
             .catch(err => {
