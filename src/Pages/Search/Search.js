@@ -88,8 +88,15 @@ const Search = () => {
                         <div className='d-flex mt-3 align-items-center justify-content-between'>
                             <div className='d-flex flex-column text-dark'>
                                 <p className='mb-1 ps-2 fw-bold'>Date<span className='text-danger'>*</span></p>
-                                <input type="date" value={date} onChange={e => setDate(e.target.value)} className='rounded p-2' style={{ outline: "none", border: "0", background: "rgb(140, 217, 161)" }} />
-                                <hr className='p-0 m-0 text-dark' />
+                                <input 
+                                type="date" 
+                                value={date} 
+                                onChange={e => setDate(e.target.value)} 
+                                className='rounded p-2 pointer-events-none bg-gray-300' 
+                                style={{ outline: "none", border: "0", background: "rgb(140, 217, 161)" }} 
+                                min={new Date().toISOString().split("T")[0]} // Disable past dates
+                                />
+                            <hr className='p-0 m-0 text-dark' />
                             </div>
 
                             <div>

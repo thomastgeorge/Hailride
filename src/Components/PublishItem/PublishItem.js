@@ -205,12 +205,12 @@ const PublishItem = ({ ride, type }) => {
                     }                
                     {
                         type === "hailed" && ride.status === "started" &&
-                        <div className="d-flex rounded p-3">
+                        <div className="d-flex rounded p-3 align-items-center">
                             {
                                 loader ?
                                     <DotSpinner />
                                     :
-                                    <div className="btn btn-danger px-2 py-3" onClick={emergencySOS}>Emergency SOS</div>
+                                    <div className="btn btn-danger px-2.5 py-2" onClick={emergencySOS}>Emergency SOS</div>
                             }
                         </div>
                     }

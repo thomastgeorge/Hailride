@@ -126,8 +126,14 @@ const AddItem = ({ open, setOpen }) => {
                     <div>
                         <div className='mt-2 d-flex justify-content-between align-items-center rounded-3 p-2 pb-0 w-100'>
                             <b>Ride Date<span className='text-danger'>*</span></b>
-                            <input value={rideDate} onChange={e => setRideDate(e.target.value)} className='p-2 w-75 bg-white rounded-3' type="date"
-                                style={!valid && rideDate ? { borderColor: "red", background: "#ff00001c", outline: "none", border: "0" } : { outline: "none", border: "0" }} />
+                            <input 
+                            value={rideDate} 
+                            onChange={e => setRideDate(e.target.value)} 
+                            className='p-2 w-75 bg-white rounded-3' 
+                            type="date"
+                            min={new Date().toISOString().split("T")[0]} // Set min attribute to current date
+                            style={!valid && rideDate ? { borderColor: "red", background: "#ff00001c", outline: "none", border: "0" } : { outline: "none", border: "0" }} 
+                            />
                         </div>
                     </div>
                     <hr className='m-0 p-0' />
