@@ -6,6 +6,8 @@ import { useNavigate } from 'react-router-dom'
 import { DotSpinner } from '@uiball/loaders'
 import { Rating } from 'react-simple-star-rating'
 import PDetails from '../passengerDetails/pDetails'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCopy } from '@fortawesome/free-regular-svg-icons';
 
 
 const PublishItem = ({ ride, type }) => {
@@ -21,11 +23,18 @@ const PublishItem = ({ ride, type }) => {
     const [email, setemail] = useState(user.email)
     const [name, setname] = useState(user.name)
     const [gender, setgender] = useState(user.personalDetails?.gender)
+    const [mobile, setmobile] = useState(user.personalDetails?.mobile)
     const [passengerDetails, setpassengerDetails] = useState({
         email: email,
         name: name,
-        gender: gender
+        gender: gender,
+        mobile: mobile
     })
+
+    const [isUserHailed, setisUserHailed] = useState(false)
+    useEffect(() => {      
+        {(ride.addedByEmail === user.email) ? setisUserHailed(true): setisUserHailed(false)}
+    }, [])
 
     const nav = useNavigate()
 
@@ -47,6 +56,7 @@ const PublishItem = ({ ride, type }) => {
                 console.log(err);
             })
     }
+
     useEffect(() => {
         Axios.get('/api/v1/app/rides/getUserDetails', {
             params: {
@@ -116,6 +126,17 @@ const PublishItem = ({ ride, type }) => {
             })
     }    
 
+    const handleCopyToClipboard = (text) => {
+        navigator.clipboard.writeText(text)
+            .then(() => {
+                // Optionally, you can provide feedback to the user that the text has been copied.
+                console.log('Mobile number copied to clipboard:', text);
+            })
+            .catch((error) => {
+                console.error('Error copying mobile number to clipboard:', error);
+            });
+    };
+    
     return (
         <div className="rounded my-2" style={{ backgroundColor: '#8cd9a1' }}>
             <div className="p-3" onClick={() => setDeleteSection(!deleteSection)}>
@@ -139,6 +160,15 @@ const PublishItem = ({ ride, type }) => {
                         <img className='rounded-circle' style={{ height: "40px", width: "40px", objectFit: "cover" }} src="https://img.freepik.com/free-photo/serious-surprised-attractive-man-holds-chin-looks-with-widely-opened-eyes-camera-wears-casual-sweater-listens-with-shocked-expression_273609-24440.jpg?w=900&t=st=1697382980~exp=1697383580~hmac=d5d10c6bf1c11ec8dd0dbf63f6b71321d6b27f5387d00447d3f6722950e517a0" />
                         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', marginLeft: '10px' }}>
                             <b className="text-white ms-2">{ride.addedBy}</b>
+                            <div className="ms-2" style={{ display: 'inline-block' }}>
+                                {(type !== "hail" ) ? 
+                                <>
+                                    <p style={{ display: 'inline-block', marginRight: '5px' }}>{ride.mobile}</p>
+                                    <FontAwesomeIcon icon={faCopy} onClick={() => handleCopyToClipboard(ride.mobile)} style={{ cursor: 'pointer', display: 'inline-block' }} />
+                                </>
+                                : null
+                                }
+                            </div>
                             <div>
                                 {
                                     ride.status === "" && type === "hail" &&
@@ -165,7 +195,7 @@ const PublishItem = ({ ride, type }) => {
             {
                 (deleteSection && type === "published" && ride.status === "") &&
                 < div  style={{ justifyContent: "right", backgroundColor: "#1c104154" }}>
-                     <PDetails ride={ride} />
+                     <PDetails ride={ride} isUserHailed={isUserHailed} />
                      < div className="p-2 pt-2 d-flex rounded gap-2" style={{ justifyContent: "right" }}>
                     <div className="btn btn-success p-2 pt-2 rounded gap-2" onClick={() => updateRideStatus("started")}>Started</div>
                     <div className="btn btn-danger p-2 pt-2 rounded gap-2" onClick={cancelRide}>Cancel Ride</div>
@@ -175,7 +205,7 @@ const PublishItem = ({ ride, type }) => {
             {
                 (deleteSection && type === "published" && ride.status === "started") &&
                 < div  style={{ justifyContent: "right", backgroundColor: "#1c104154" }}>
-                    <PDetails ride={ride} />
+                    <PDetails ride={ride} isUserHailed={isUserHailed}/>
                     < div className="p-2 pt-2 d-flex rounded gap-2" style={{ justifyContent: "right" }}>
                     <div className="btn btn-danger p-2 pt-2 rounded gap-2"  onClick={() => updateRideStatus("ended")}>End Ride</div>
                     </div>
@@ -184,7 +214,7 @@ const PublishItem = ({ ride, type }) => {
             {
                 (deleteSection && (type === "hail" || type === "hailed")) &&
                 <div  style={{ backgroundColor: "#1c104154" }}>
-                    <PDetails ride={ride} />
+                    <PDetails ride={ride} isUserHailed={isUserHailed}/>
                     <div className="p-2 d-flex rounded gap-2  justify-content-between " >
                     <div className="p-2 rounded text-start flex-column d-flex">
                         <b>Vehicle Details</b>

@@ -19,7 +19,8 @@ const Profile = () => {
     const [personalDetails, setPersonalDetails] = useState({
         dob: "",
         gender: "",
-        address: ""
+        address: "",
+        mobile: ""
     })
     const [vehicleDetails, setVehicleDetails] = useState({
         number: "",
@@ -182,6 +183,21 @@ const Profile = () => {
                                     setPersonalDetails({
                                         ...personalDetails,
                                         address: e.target.value
+                                    });
+                                    setUpdatePersonal(true)
+                                }}
+                                style={{ outline: "none", border: "0" }} />
+                            <hr className='m-0 p-0' />
+                        </div>
+                    </div>
+                    <div className='d-flex rounded align-items-center gap-3 my-2'>
+                        <b className='w-25'>Phone Number</b>
+                        <div className='w-75'>
+                            <input className='bg-black text-white' value={personalDetails?.mobile}
+                                onChange={e => {
+                                    setPersonalDetails({
+                                        ...personalDetails,
+                                        mobile: e.target.value
                                     });
                                     setUpdatePersonal(true)
                                 }}

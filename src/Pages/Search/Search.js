@@ -13,7 +13,7 @@ const Search = () => {
 
     const [from, setFrom] = useState("")
     const [to, setTo] = useState("")
-    const [date, setDate] = useState(new Date().toISOString().split('T')[0])
+    const [date, setDate] = useState("")
     const [passengers, setPassengers] = useState(1)
 
     const nav = useNavigate()

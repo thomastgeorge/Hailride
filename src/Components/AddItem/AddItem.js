@@ -58,6 +58,7 @@ const AddItem = ({ open, setOpen }) => {
             addedBy: user.name,
             from: from,
             to: to,
+            mobile: user.personalDetails?.mobile,
             starts: starts,
             ends: ends,
             rideDate: rideDate,
