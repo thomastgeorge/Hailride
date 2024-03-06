@@ -46,7 +46,7 @@ const MyRides = () => {
                             :
                             rides.slice().reverse().filter(ride => ride.status != "ended").map(ride => {
                                 return (
-                                    <PublishItem ride={ride} type="hailed" />
+                                    <PublishItem ride={ride} type="hailed"/>
                                 )
                             })
                 }

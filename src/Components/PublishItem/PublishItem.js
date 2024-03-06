@@ -85,7 +85,6 @@ const PublishItem = ({ ride, type }) => {
         }
     }
 
-
     const cancelRide = () => {
         Axios.delete('/api/v1/app/rides/deleteRide', {
             params: {
@@ -99,6 +98,7 @@ const PublishItem = ({ ride, type }) => {
                 console.log(err);
             })
     }
+
     const updateRideStatus = (val) => {
         Axios.put('/api/v1/app/rides/updateRideStatus', {
             rideId: ride.rideId,
@@ -163,7 +163,7 @@ const PublishItem = ({ ride, type }) => {
                             <div className="ms-2" style={{ display: 'inline-block' }}>
                                 {(type !== "hail" ) ? 
                                 <>
-                                    <p style={{ display: 'inline-block', marginRight: '5px' }}>{ride.mobile}</p>
+                                    <b style={{ display: 'inline-block', marginRight: '5px' }}>{ride.mobile}</b>
                                     <FontAwesomeIcon icon={faCopy} onClick={() => handleCopyToClipboard(ride.mobile)} style={{ cursor: 'pointer', display: 'inline-block' }} />
                                 </>
                                 : null

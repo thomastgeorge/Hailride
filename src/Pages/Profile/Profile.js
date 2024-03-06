@@ -109,7 +109,7 @@ const Profile = () => {
                 <div className='d-flex flex-column ms-3 text-white justify-content-center'>
                     <b className='fs-2 m-0 p-0'>{user?.name}</b>
                     <p className='m-0 p-0'><i>{user?.email}</i></p>
-                    <p className='m-0 p-0'><i>8527419638</i></p>
+                    <p className='m-0 p-0'><i>{user.personalDetails?.mobile}</i></p>
                 </div>
 
             </div>

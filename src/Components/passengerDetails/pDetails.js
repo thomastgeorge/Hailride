@@ -36,7 +36,7 @@ const PDetails = ({ride, isUserHailed}) => {
         <div className="p-2 text-start d-flex justify-content-between rounded">
         {passengers.length > 0 ? (
             <div style={{ margin: '10px' }}>
-                <h6>Passenger Name - Gender:</h6>
+                <h6>Passenger Name - Gender - Mobile:</h6>
                 <ol style={{ margin: 4, padding: 0 }}>
                     {passengers.map((passenger, index) => (
                         <li key={index} style={{ margin: '1px 0', padding: 0 }}>

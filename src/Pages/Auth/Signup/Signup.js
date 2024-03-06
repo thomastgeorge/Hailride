@@ -17,11 +17,22 @@ const Signup = () => {
     const [viewPassword, setviewPassword] = useState(false)
     const [err, seterr] = useState("")
     const [success, setsuccess] = useState("")
+    const [error, setError] = useState("");
+    const [otpUser, setotpUser] = useState("")
+    const [otpEmail, setotpEmail] = useState("")
+    const [btnClick, setbtnClick] = useState(false)
 
     const nav = useNavigate()
 
     const signUp = async () => {
         setloading(true)
+
+        if (!name || !email || !pswd || !regno) {
+            setError("Please enter all required details.");
+            setloading(false);
+            return;
+        }
+
         const response = await fetch(process.env.REACT_APP_BACKEND_URL + "/api/v1/app/auth/signUp", {
             method: "POST",
 
@@ -62,7 +73,7 @@ const Signup = () => {
         var re1 = /^(?![\S]*\d)[\S*a-z\.]+[@]christuniversity\.in/g;    //faculty
         var re2 = /^(?![\S]*\d)[\S*a-z\.]+[@][a-z\.]+[\.]christuniversity\.in/g;    //students
         if(re1.test(email) || re2.test(email)){
-            setemailMessage("Valid Email")
+            setemailMessage("Valid Email ID")
             setemailMessageColor(true)
         }
         else if(email === ""){
@@ -104,6 +115,31 @@ const Signup = () => {
         validateRegno();
     }, [email, regno]);
 
+    const sendOTPVerificationEmail = () => {
+            setbtnClick(true)
+            Axios.post('/api/v1/app/auth/sendOTPVerificationEmail', {
+                email: email,
+                name: name
+            })
+                .then(res => {
+                    console.log(res);
+                    setotpEmail(res.data.otp);
+                })
+                .catch(err => { console.log(err);})
+    }
+
+    const checkOTP = () => {
+        console.log(otpUser);
+        console.log(otpEmail);
+        if(otpUser == otpEmail){
+            console.log("OTP verified");
+            signUp();
+        }
+        else{
+            seterr("Invalid OTP");
+        }
+    }
+
     return (
         <div className='d-flex justify-content-center align-items-center' style={{ height: '100vh', width: '100vw' }}>
             <div className='rounded-3 mx-3 pb-4 d-flex flex-column align-items-center' style={{ backgroundColor: "#8cd9a1", boxShadow: "rgb(121 121 121 / 28%) 6px 6px 13px 1px" }}>
@@ -126,6 +162,7 @@ const Signup = () => {
                             </>
                             :
                             <div className="d-flex flex-column align-items-center">
+                                {error && <div className="text-danger error">{error}</div>}
                                 <input style={{ width: "250px", outline: "none", border: "none", background: "#e8f0fe" }} className="rounded-3 m-2 p-2 " type="text" placeholder='Name'
                                     value={name} onChange={(e) => setname(e.target.value)} onKeyDown={handleKeyDown}></input>
                                 <input style={{ width: "250px", outline: "none", border: "none", background: "#e8f0fe" }} className="rounded-3 m-2 p-2 " type="email" placeholder='College email'
@@ -145,7 +182,18 @@ const Signup = () => {
                                         }
                                     </div>
                                 </div>
-                                <div onClick={() => signUp()} className='btn btn-dark w-100 ms-2 mt-3 py-2'>
+                                <div className="mt-2 align-items-start mx-3 d-flex">
+                                    {(emailMessageColor && name !== "") && (
+                                    <>
+                                        <b className='btn btn-dark p-2' style={{height: '40px'}} onClick={() => sendOTPVerificationEmail()}>Verify Email</b>
+                                        {btnClick && (
+                                            <input style={{ width: "140px", outline: "none", border: "none", background: "#e8f0fe", marginLeft: '10px'}} className="rounded-3 p-2 pe-3" type="text" placeholder='OTP'
+                                            value={otpUser} onChange={(e) => setotpUser(e.target.value)} onKeyDown={handleKeyDown}></input>
+                                        )}
+                                    </>
+                                    )}
+                                </div>
+                                <div onClick={() => checkOTP()} style={{width: "250px", height: '40px'}} className='btn btn-dark ms-2 mt-3 py-2'>
                                     {loading ?
                                         <Ring
                                             size={20}
@@ -153,7 +201,7 @@ const Signup = () => {
                                             color="white"
                                         />
                                         :
-                                        <b>Signup</b>
+                                        <b>Signup</b>                                     
                                     }
                                 </div>
                                 <div className='mt-3'>

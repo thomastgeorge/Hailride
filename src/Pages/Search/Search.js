@@ -72,7 +72,7 @@ const Search = () => {
                     !valid &&
                     <b className="text-danger ps-3">*Fill out the required feilds</b>
                 }
-                <div className='rounded m-3' style={{ backgroundColor: "#8cd9a1" }}>
+                <div className='rounded m-3 ' style={{ backgroundColor: "#8cd9a1" }}>
                     <div className='p-3 pb-4'>
                         <div className='mt-2 d-flex justify-content-between align-items-center rounded-3 p-2 pb-0 w-100'>
                             <b>From<span className='text-danger'>*</span></b>
