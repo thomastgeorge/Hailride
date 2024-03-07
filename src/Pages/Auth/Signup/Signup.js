@@ -88,18 +88,8 @@ const Signup = () => {
     const validateRegno = () => {
         var re = /^\d+$/g
         if(re.test(regno)){
-            if((/^(?![\S]*\d)[\S*a-z\.]+[@]christuniversity\.in/g).test(email) && regno.length === 4){
-                setregnoMessage("Valid registration number")
-                setregnoMessageColor(true)
-            }
-            else if((/^(?![\S]*\d)[\S*a-z\.]+[@][a-z]+[\.]christuniversity\.in/g).test(email) && regno.length === 7){
             setregnoMessage("Valid registration number")
             setregnoMessageColor(true)
-            }
-            else if (email !== ""){
-                setregnoMessage("Invalid registration number")
-                setregnoMessageColor(false)
-            }
         }
         else if(regno === ""){
             setregnoMessage("")
