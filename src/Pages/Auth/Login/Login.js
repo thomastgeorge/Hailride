@@ -72,6 +72,7 @@ const Login = ({ setauthenticated }) => {
                     })
             })
             .catch((err) => {
+                console.log("hi")
                 console.log(err)
                 seterr(err.message)
                 seterr("Something went wrong! try again")

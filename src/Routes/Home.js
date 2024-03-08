@@ -29,20 +29,20 @@ const Home = () => {
                 {
                     user.isAdmin ?
                         <>
-                            <Route path="/dashboard" element={<AdminDashboard />} />
+                            {/* <Route path="/dashboard" element={<AdminDashboard />} />
                             <Route path="/accepted" element={<Accepted />} />
                             <Route path="/projects" element={<AdminRequests requestType={"project"} />} />
                             <Route path="/assignments" element={<AdminRequests requestType={"assignment"} />} />
-                            <Route path="/records" element={<AdminRequests requestType={"record"} />} />
+                            <Route path="/records" element={<AdminRequests requestType={"record"} />} /> */}
                             <Route path="/" element={<AdminDashboard />} />
                         </>
                         :
                         <>
-                            <Route path="/dashboard" element={<Dashboard />} />
+                            {/* <Route path="/dashboard" element={<Dashboard />} />
                             <Route path="/categories" element={<Categories />} />
                             <Route path="/projects" element={<Projects />} />
                             <Route path="/assignments" element={<Assignments />} />
-                            <Route path="/records" element={<Records />} />
+                            <Route path="/records" element={<Records />} /> */}
 
                             <Route path="/search" element={<Search />} />
                             <Route path="/publish" element={<Publish />} />
