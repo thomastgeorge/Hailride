@@ -121,7 +121,7 @@ const Signup = () => {
     const checkOTP = () => {
         console.log(otpUser);
         console.log(otpEmail);
-        if(otpUser == otpEmail){
+        if(otpUser == otpEmail && otpUser != "" && otpEmail != ""){
             console.log("OTP verified");
             signUp();
         }
@@ -183,7 +183,7 @@ const Signup = () => {
                                     </>
                                     )}
                                 </div>
-                                <div onClick={() => checkOTP()} style={{width: "250px", height: '40px'}} className='btn btn-dark ms-2 mt-3 py-2'  disabled={!email && !pswd && !name && !regno }>
+                                <div onClick={() => checkOTP()} style={{width: "250px", height: '40px'}} className='btn btn-dark ms-2 mt-3 py-2'  disabled={!email && !pswd && !name && !regno && !otpUser}>
                                     {loading ?
                                         <Ring
                                             size={20}
