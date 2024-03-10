@@ -103,8 +103,8 @@ const Profile = () => {
     }
 
     return (
-        <div className='p-4 pb-5 mb-3 h-100 text-white' style={{ background: "#d5f8e5" }}>
-            <div className='d-flex p-2 rounded-3 align-items-center' style={{ background: "#000" }}>
+        <div className='p-4 pb-5 mb-3 text-white' style={{ background: "#d5f8e5" }}>
+            <div className='p-2 rounded-3 align-items-center' style={{ background: "#000" }}>
                 <div><img src="profile.png" height="100px" width="100px" style={{ borderRadius: "50%" }} /></div>
                 <div className='d-flex flex-column ms-3 text-white justify-content-center'>
                     <b className='fs-2 m-0 p-0'>{user?.name}</b>
@@ -297,7 +297,10 @@ const Profile = () => {
             </div>
 
             <div onClick={signOut} className='my-3 btn btn-danger w-100 rounded-3 text-white'><b>Signout</b></div>
-
+            <div style={{ background: "#d5f8e5" }}>
+                <h6 className='p-2 text-dark'>Contact Us</h6>
+                <a className="p-2 text-dark"  style={{textDecoration: "none"}} href="mailto:contact.hailride@gmail.com">Email: contact.hailride@gmail.com</a>
+            </div>
         </div>
     )
 }
