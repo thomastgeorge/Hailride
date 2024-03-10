@@ -183,7 +183,7 @@ const Signup = () => {
                                     </>
                                     )}
                                 </div>
-                                <div onClick={() => checkOTP()} style={{width: "250px", height: '40px'}} className='btn btn-dark ms-2 mt-3 py-2'>
+                                <div onClick={() => checkOTP()} style={{width: "250px", height: '40px'}} className='btn btn-dark ms-2 mt-3 py-2'  disabled={!email && !pswd && !name && !otpUser && !regno }>
                                     {loading ?
                                         <Ring
                                             size={20}
