@@ -139,8 +139,8 @@ const PublishItem = ({ ride, type }) => {
     
     return (
         <div className="rounded my-2" style={{ backgroundColor: '#8cd9a1' }}>
-            <div className="p-3" onClick={() => setDeleteSection(!deleteSection)}>
-                <div className='d-flex text-white'>
+            <div onClick={() => setDeleteSection(!deleteSection)}>
+                <div className='p-3 d-flex text-white' style={{height: '65px'}}>
                     <div className='pe-2'>
                         <b style={{ whiteSpace: "nowrap" }}>{ride.starts}</b>
                         <p style={{ whiteSpace: "nowrap" }}>{ride.from}</p>
@@ -155,7 +155,7 @@ const PublishItem = ({ ride, type }) => {
                         <p style={{ whiteSpace: "nowrap" }}>{ride.to}</p>
                     </div>
                 </div>
-                <div className='d-flex align-items-center justify-content-between'>
+                <div className='p-3 d-flex align-items-center justify-content-between'>
                     <div className='d-flex'>
                         <img className='rounded-circle' style={{ height: "40px", width: "40px", objectFit: "cover" }} src="https://img.freepik.com/free-photo/serious-surprised-attractive-man-holds-chin-looks-with-widely-opened-eyes-camera-wears-casual-sweater-listens-with-shocked-expression_273609-24440.jpg?w=900&t=st=1697382980~exp=1697383580~hmac=d5d10c6bf1c11ec8dd0dbf63f6b71321d6b27f5387d00447d3f6722950e517a0" />
                         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', marginLeft: '10px' }}>
@@ -189,8 +189,13 @@ const PublishItem = ({ ride, type }) => {
                             <b className="">Rs {ride.rate}</b>
                         </div>
                     </div>
-
                 </div>
+                {
+                    (deleteSection && ride.status === "ended") &&
+                        < div className="p-0" style={{ backgroundColor: "#1c104154"}}>
+                        <PDetails ride={ride} isUserHailed={isUserHailed} />
+                                    </div>
+                }
             </div>
             {
                 (deleteSection && type === "published" && ride.status === "") &&
