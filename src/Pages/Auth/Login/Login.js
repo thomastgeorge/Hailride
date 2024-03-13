@@ -94,7 +94,6 @@ const Login = ({ setauthenticated }) => {
             <div className='rounded-3 mx-3 pb-4 d-flex flex-column align-items-center' style={{ backgroundColor: "#8cd9a1", boxShadow: "rgb(121 121 121 / 28%) 6px 6px 13px 1px" }}>
                 <img className="rounded" src="login.jpg"
                     style={{ width: "100%" }} />
-                {/* <b className='h1 fw-bold py-3 pb-2'><i>Assign Me</i></b> */}
                 <div className="p-3 pt-0 d-flex flex-column align-items-center">
                     <img src="hailride.png" height="50px" className='my-3' />
                     {
