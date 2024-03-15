@@ -112,7 +112,7 @@ const Map = ({ setFrom, setTo }) => {
             </form>
             <MapContainer
                 className='markercluster'
-                style={{ height: 400, margin: 0, padding: 0 }}
+                style={{ height: 300, margin: 0, padding: 0 }}
                 center={[12.88, 77.45]}
                 zoom={13}
                 ref={mapRef}

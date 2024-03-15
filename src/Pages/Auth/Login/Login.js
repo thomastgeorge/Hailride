@@ -13,6 +13,15 @@ const Login = ({ setauthenticated }) => {
     const [loading, setloading] = useState(false)
     const [viewPassword, setviewPassword] = useState(false)
     const [err, seterr] = useState("")
+    const [forgotPswd, setforgotPswd] = useState(false)
+    const [emailMessage, setemailMessage] = useState("")
+    const [emailMessageColor, setemailMessageColor] = useState(false)
+    const [otpUser, setotpUser] = useState("")
+    const [otpEmail, setotpEmail] = useState("")
+    const [btnClick, setbtnClick] = useState(false)
+    const [otpVerified, setotpVerified] = useState(false)
+    const [newPswd, setnewPswd] = useState("")
+    const [pswdMessage, setpswdMessage] = useState("")
 
     const { setUser } = useContext(UserContext)
 
@@ -72,7 +81,6 @@ const Login = ({ setauthenticated }) => {
                     })
             })
             .catch((err) => {
-                console.log("hi")
                 console.log(err)
                 seterr(err.message)
                 seterr("Something went wrong! try again")
@@ -81,12 +89,112 @@ const Login = ({ setauthenticated }) => {
             })
     }
 
+    const changepassword = async () => {
+        setloading(true)
+        Axios.post('/api/v1/app/auth/changePassword', {
+            email: email,
+            password: newPswd
+        })
+            .then(res => {
+                console.log(res);
+                console.log(res.data);
+                setloading(false)
+                setforgotPswd(false)
+                setotpVerified(false)
+                setpswdMessage("Password changed successfully")
+            })
+            .catch(err => {
+                console.log(err);
+                console.log(err.response.data);
+                console.log(err.message)
+                setloading(false)
+                seterr("Something went wrong! try again")
+        })
+    }
+
     const handleKeyDown = (event) => {
         if (event.key === 'Enter') {
             event.preventDefault(); // Prevent form submission
             login();
         }
     }
+
+    const validateEmail = () => {
+        var re1 = /^(?![\S]*\d)[\S*a-z\.]+[@]christuniversity\.in/g;    //faculty
+        var re2 = /^(?![\S]*\d)[\S*a-z\.]+[@][a-z\.]+[\.]christuniversity\.in/g;    //students
+        if(re1.test(email) || re2.test(email)){
+            setemailMessage("Valid Email ID")
+            setemailMessageColor(true)
+        }
+        else if(email === ""){
+            setemailMessage("")
+        }
+        else{
+            setemailMessage("Invalid Email: Enter college email")
+            setemailMessageColor(false)
+        }
+    }
+
+    const sendOTPPasswordReset = () => {
+        setbtnClick(true)
+        Axios.post('/api/v1/app/auth/sendOTPPasswordReset', {
+            email: email
+        })
+            .then(res => {
+                console.log(res);
+                console.log(res.data);
+                setotpEmail(res.data.otp);
+            })
+            .catch(err => {
+                console.log(err);
+                console.log(err.response.data);
+                console.log(err.message)})
+    }
+
+    const checkOTP = () => {
+        console.log(otpUser);
+        console.log(otpEmail);
+        if(otpUser == otpEmail && otpUser != "" && otpEmail != ""){
+            console.log("OTP verified");
+            setotpVerified(true)
+        }
+        else{
+            seterr("Invalid OTP");
+        }
+    }
+
+    const checkPswd = () => {
+        if(pswd === newPswd && pswd != "" && newPswd != ""){
+            console.log("Password verified");
+            changepassword();
+        }
+        else{
+            seterr("Password mismatch");
+        }
+    }
+
+    useEffect(() => {
+        validateEmail();
+    }, [email]);
+
+    const forgotpassword = () => {
+    console.log("forgot password clicked")
+    setforgotPswd(true)
+    }
+
+    useEffect(() => {
+        let timeoutId;
+    
+        if (pswdMessage !== "") {
+          timeoutId = setTimeout(() => {
+            setpswdMessage('');
+          }, 5000);
+        }
+    
+        return () => {
+          clearTimeout(timeoutId);
+        };
+      }, [pswdMessage]);
 
 
     return (
@@ -100,7 +208,60 @@ const Login = ({ setauthenticated }) => {
                         err !== "" &&
                         <b className='text-danger mb-2'>{err}</b>
                     }
+                    {
+                        forgotPswd ?
+                        (!otpVerified ?
+                        <>
+                        <b>Forgot Password</b>
+                        <input style={{ width: "250px", outline: "none", border: "none", background: "#e8f0fe" }} className="rounded-3 m-2 p-2 " type="text" placeholder='Email'
+                            value={email} onChange={(e) => setemail(e.target.value)} onKeyDown={handleKeyDown}></input>
+                            <div className={emailMessageColor ? 'text-sm' : 'text-danger text-sm'}>{emailMessage}</div>
+                            <div className="mt-2 align-items-start mx-3 d-flex">
+                                    {(emailMessageColor) && (
+                                    <>
+                                        <b className='btn btn-dark p-2' style={{height: '40px'}} onClick={() => sendOTPPasswordReset()}>Send OTP</b>
+                                        {btnClick && (
+                                            <input style={{ width: "140px", outline: "none", border: "none", background: "#e8f0fe", marginLeft: '10px'}} className="rounded-3 p-2 pe-3" type="text" placeholder='OTP'
+                                            value={otpUser} onChange={(e) => setotpUser(e.target.value)} onKeyDown={handleKeyDown}></input>
+                                        )}
+                                    </>
+                                    )}
+                                </div>
+                                <div onClick={() => checkOTP()} style={{width: "250px", height: '40px'}} className='btn btn-dark ms-2 mt-3 py-2'>
+                                        <b>Continue</b>                                     
+                                </div>
+                            </>
+                        :
+                        <div>
+                            <b className="p-3" >Forgot Password</b>
+                                <input style={{ width: "250px", outline: "none", border: "none", background: "#e8f0fe" }} className="rounded-3 m-2 p-2" type="text" placeholder='New Password' value={pswd} onChange={(e) => setpswd(e.target.value)} onKeyDown={handleKeyDown}></input>
+                                <div style={{ width: "250px", background: "#e8f0fe" }} className="d-flex justify-content-between rounded-3 m-2 p-2 pe-3">
+                                <input style={{ outline: "none", border: "none", background: "#e8f0fe" }} type={viewPassword ? "text" : "password"} placeholder='Confirm Password' value={newPswd} onChange={(e) => setnewPswd(e.target.value)} onKeyDown={handleKeyDown}></input>
+                                    <div onClick={() => setviewPassword(!viewPassword)} className='d-flex me-0 pe-1' style={{ cursor: "pointer", margin: "auto" }} >
+                                    {
+                                            viewPassword ?
+                                                <EyeClosedIcon size={18} />
+                                                :
+                                                <EyeIcon size={18} />
+                                        }
+                                    </div>
+                                </div>
+                                <div onClick={() => checkPswd()} style={{width: "250px", height: '40px'}} className='btn btn-dark ms-2 mt-3 py-2'>
+                                    {loading ?
+                                        <Ring
+                                            size={20}
+                                            speed={2}
+                                            color="white"
+                                        />
+                                        :
+                                        <b>Set Password</b>                                     
+                                    }                                    
+                                </div>
+                        </div>
+                        )
+                        :
                     <div className="d-flex flex-column align-items-center">
+                        {pswdMessage !== "" && <div>{pswdMessage}</div>}
                         <input style={{ width: "250px", outline: "none", border: "none", background: "#e8f0fe" }} className="rounded-3 m-2 p-2 " type="text" placeholder='Email'
                             value={email} onChange={(e) => setemail(e.target.value)} onKeyDown={handleKeyDown}></input>
                         <div style={{ width: "250px", background: "#e8f0fe" }} className="d-flex justify-content-between rounded-3 m-2 p-2 pe-4">
@@ -126,9 +287,13 @@ const Login = ({ setauthenticated }) => {
                             }
                         </div>
                         <div className='mt-3'>
+                            <b onClick={() => forgotpassword()}>Forgot Password</b>
+                        </div>
+                        <div className='mt-3'>
                             <b>Don't have account? <span onClick={() => nav('/signup')} className='text-danger'>Signup</span></b>
                         </div>
                     </div>
+                    }
                 </div>
             </div>
         </div>
