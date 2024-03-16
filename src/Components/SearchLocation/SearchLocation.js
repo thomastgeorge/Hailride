@@ -6,8 +6,8 @@ const SearchLocation = ({ open, setOpen, setLocation }) => {
 
     const [searchValue, setSearchValue] = useState("")
 
-    const [locations, setlocations] = useState(['Kengeri', 'Marthahalli', 'Provident Sunworth', 'KR Market', 'Hebbal', 'WhiteField', 'Electronic City', 'MG Road', 'Lal Bhag', 'Kumbalgodu', 'Kormangala', 'Indira Nagar', 'RR Nagar', 'JP Nagar', 'Bannerghatta',
-'Kanmanike', 'Yelahanka', 'Christ University', 'Mysore', 'Bidadi', 'Yeshwantpur', 'J Nagar', 'Kengeri Metro', 'Majestic', 'Jigani', 'Mysore Road', 'Kalyan Nagar', 'Rajaji Nagar', 'Nagasandra', 'Silk Institute', 'RR Medical College'])
+    const [locations, setlocations] = useState(['Kengeri', 'Marthahalli', 'Provident Sunworth', 'Christ University', 'KR Market', 'Hebbal', 'WhiteField', 'Electronic City', 'MG Road', 'Lal Bhag', 'Kumbalgodu', 'Kormangala', 'Indira Nagar', 'RR Nagar', 'JP Nagar', 'Bannerghatta',
+'Kanmanike', 'Yelahanka', 'Mysore', 'Bidadi', 'Yeshwantpur', 'J Nagar', 'Kengeri Metro', 'Majestic', 'Jigani', 'Mysore Road', 'Kalyan Nagar', 'Rajaji Nagar', 'Nagasandra', 'Silk Institute', 'RR Medical College'])
 
     const [loading, setLoading] = useState(false);
     const showModal = () => {
@@ -42,7 +42,7 @@ const SearchLocation = ({ open, setOpen, setLocation }) => {
                     {
                         locations
                             .filter(loc => loc.toLowerCase().includes(searchValue.toLowerCase()))
-                            .slice(0, 6) // Display only the first 6 matching elements
+                            .slice(0, 15) // Display only the first 6 matching elements
                             .map(loc => (
                                 <div onClick={() => { setLocation(loc); setOpen(false) }} className="searchElement d-flex p-2 w-100 bg-light rounded my-2 align-items-center">
                                     <div style={{ fontSize: "16px" }}>{loc}</div>

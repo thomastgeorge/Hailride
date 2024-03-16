@@ -200,7 +200,7 @@ const PublishItem = ({ ride, type }) => {
             {
                 (deleteSection && type === "published" && ride.status === "") &&
                 < div  style={{ justifyContent: "right", backgroundColor: "#1c104154" }}>
-                     <PDetails ride={ride} isUserHailed={isUserHailed} />
+                     <PDetails ride={ride} isUserHailed={isUserHailed}/>
                      < div className="p-2 pt-2 d-flex rounded gap-2" style={{ justifyContent: "right" }}>
                     <div className="btn btn-success p-2 pt-2 rounded gap-2" onClick={() => updateRideStatus("started")}>Started</div>
                     <div className="btn btn-danger p-2 pt-2 rounded gap-2" onClick={cancelRide}>Cancel Ride</div>

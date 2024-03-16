@@ -1,10 +1,11 @@
 import { BookmarkFillIcon, CalendarIcon, DuplicateIcon, PersonFillIcon, PersonIcon } from '@primer/octicons-react'
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import SearchLocation from '../../Components/SearchLocation/SearchLocation'
 import { useNavigate } from 'react-router-dom'
 import { Axios } from '../../Config/Axios/Axios'
 import { Spin } from 'antd'
 import { DotSpinner, LeapFrog } from '@uiball/loaders'
+import { UserContext } from '../../App'
 
 const Search = () => {
 
@@ -15,6 +16,7 @@ const Search = () => {
     const [to, setTo] = useState("")
     const [date, setDate] = useState("")
     const [passengers, setPassengers] = useState(1)
+    const { user } = useContext(UserContext)
 
     const nav = useNavigate()
 
@@ -40,7 +42,8 @@ const Search = () => {
                 from: from,
                 to: to,
                 date: date,
-                passengers: passengers
+                passengers: passengers,
+                email: user.email
             }
         })
             .then(res => {

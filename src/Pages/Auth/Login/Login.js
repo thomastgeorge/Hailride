@@ -101,6 +101,7 @@ const Login = ({ setauthenticated }) => {
                 setloading(false)
                 setforgotPswd(false)
                 setotpVerified(false)
+                seterr("")
                 setpswdMessage("Password changed successfully")
             })
             .catch(err => {

@@ -3,7 +3,7 @@ import { Axios } from '../../Config/Axios/Axios'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCopy } from '@fortawesome/free-regular-svg-icons';
 
-const PDetails = ({ride, isUserHailed}) => {
+const PDetails = ({ride, isUserHailed, type}) => {
     const [passengers, setPassengers] = useState("")
 
     useEffect(() => {
