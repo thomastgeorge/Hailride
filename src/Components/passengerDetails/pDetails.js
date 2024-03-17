@@ -3,7 +3,7 @@ import { Axios } from '../../Config/Axios/Axios'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCopy } from '@fortawesome/free-regular-svg-icons';
 
-const PDetails = ({ride, isUserHailed, type}) => {
+const PDetails = ({ride, isUserDriver}) => {
     const [passengers, setPassengers] = useState("")
 
     useEffect(() => {
@@ -40,7 +40,7 @@ const PDetails = ({ride, isUserHailed, type}) => {
             <ol style={{ margin: 4, padding: 0 }}>
                 {passengers.map((passenger, index) => (
                     <li key={index} style={{ margin: '1px 0', padding: 0 }}>
-                        {(!isUserHailed) ? (
+                        {(!isUserDriver) ? (
                             <p style={{ margin: '0', padding: 0 }}>
                                 {passenger.name} - {passenger.gender}
                             </p>

@@ -31,9 +31,9 @@ const PublishItem = ({ ride, type }) => {
         mobile: mobile
     })
 
-    const [isUserHailed, setisUserHailed] = useState(false)
+    const [isUserDriver, setisUserDriver] = useState(false)
     useEffect(() => {      
-        {(ride.addedByEmail === user.email) ? setisUserHailed(true): setisUserHailed(false)}
+        {(ride.addedByEmail === user.email) ? setisUserDriver(true): setisUserDriver(false)}
     }, [])
 
     const nav = useNavigate()
@@ -99,6 +99,20 @@ const PublishItem = ({ ride, type }) => {
             })
     }
 
+    const cancelRidePassenger = () => {
+        Axios.put('/api/v1/app/rides/cancelRidePassenger', {
+            rideId: ride.rideId,
+            email: user.email
+        })
+            .then(res => {
+                window.location.reload()
+            })
+            .catch(err => {
+                console.log(err);
+            })
+        console.log('cancelRidePassenger')
+    }
+
     const updateRideStatus = (val) => {
         Axios.put('/api/v1/app/rides/updateRideStatus', {
             rideId: ride.rideId,
@@ -136,7 +150,7 @@ const PublishItem = ({ ride, type }) => {
                 console.error('Error copying mobile number to clipboard:', error);
             });
     };
-    
+
     return (
         <div className="rounded my-2" style={{ backgroundColor: '#8cd9a1' }}>
             <div onClick={() => setDeleteSection(!deleteSection)}>
@@ -193,52 +207,52 @@ const PublishItem = ({ ride, type }) => {
                 {
                     (deleteSection && ride.status === "ended") &&
                         < div className="p-0" style={{ backgroundColor: "#1c104154"}}>
-                        <PDetails ride={ride} isUserHailed={isUserHailed} />
+                        <PDetails ride={ride} isUserDriver={isUserDriver} />
                                     </div>
                 }
             </div>
             {
                 (deleteSection && type === "published" && ride.status === "") &&
                 < div  style={{ justifyContent: "right", backgroundColor: "#1c104154" }}>
-                     <PDetails ride={ride} isUserHailed={isUserHailed}/>
-                     < div className="p-2 pt-2 d-flex rounded gap-2" style={{ justifyContent: "right" }}>
-                    <div className="btn btn-success p-2 pt-2 rounded gap-2" onClick={() => updateRideStatus("started")}>Started</div>
-                    <div className="btn btn-danger p-2 pt-2 rounded gap-2" onClick={cancelRide}>Cancel Ride</div>
+                    <PDetails ride={ride} isUserDriver={isUserDriver}/>
+                    < div className="p-2 pt-2 d-flex rounded gap-2" style={{ justifyContent: "right" }}>
+                        <div className="btn btn-success p-2 pt-2 rounded gap-2" onClick={() => updateRideStatus("started")}>Started</div>
+                        <div className="btn btn-danger p-2 pt-2 rounded gap-2" onClick={cancelRide}>Cancel Ride</div>
                     </div>
                 </div>
             }
             {
                 (deleteSection && type === "published" && ride.status === "started") &&
                 < div  style={{ justifyContent: "right", backgroundColor: "#1c104154" }}>
-                    <PDetails ride={ride} isUserHailed={isUserHailed}/>
-                    < div className="p-2 pt-2 d-flex rounded gap-2" style={{ justifyContent: "right" }}>
-                    <div className="btn btn-danger p-2 pt-2 rounded gap-2"  onClick={() => updateRideStatus("ended")}>End Ride</div>
+                    <PDetails ride={ride} isUserDriver={isUserDriver}/>
+                    <div className="p-2 pt-2 d-flex rounded gap-2" style={{ justifyContent: "right" }}>
+                        <div className="btn btn-danger p-2 pt-2 rounded gap-2"  onClick={() => updateRideStatus("ended")}>End Ride</div>
                     </div>
                 </div>
             }
             {
                 (deleteSection && (type === "hail" || type === "hailed")) &&
                 <div  style={{ backgroundColor: "#1c104154" }}>
-                    <PDetails ride={ride} isUserHailed={isUserHailed}/>
+                    <PDetails ride={ride} isUserDriver={isUserDriver}/>
                     <div className="p-2 d-flex rounded gap-2  justify-content-between " >
-                    <div className="p-2 rounded text-start flex-column d-flex">
-                        <b>Vehicle Details</b>
-                        <div className="d-flex gap-2" style={{ textWrap: "nowrap" }}>
-                            <EllipsisIcon size={20} />
-                            {userDetails?.vehicleDetails?.number}
+                        <div className="p-2 rounded text-start flex-column d-flex">
+                            <b>Vehicle Details</b>
+                            <div className="d-flex gap-2" style={{ textWrap: "nowrap" }}>
+                                <EllipsisIcon size={20} />
+                                {userDetails?.vehicleDetails?.number}
+                            </div>
+                            <div className="d-flex gap-2" style={{ textWrap: "nowrap" }}>
+                                <EllipsisIcon size={20} />
+                                {userDetails?.vehicleDetails?.model}
+                            </div>
                         </div>
-                        <div className="d-flex gap-2" style={{ textWrap: "nowrap" }}>
-                            <EllipsisIcon size={20} />
-                            {userDetails?.vehicleDetails?.model}
-                        </div>
-                    </div>
-                    {
-                        type === "hail" &&
-                        <div className="d-flex align-items-center justify-content-between  " >
-                            <div className="btn btn-danger px-5" onClick={hailRide}>Hail</div>
-                        </div>
-                    }                
-                    {
+                        {
+                            type === "hail" &&
+                            <div className="d-flex align-items-center justify-content-between  " >
+                                <div className="btn btn-danger px-5" onClick={hailRide}>Hail</div>
+                            </div>
+                        }                
+                        {
                         type === "hailed" && ride.status === "started" &&
                         <div className="d-flex rounded p-3 align-items-center">
                             {
@@ -248,8 +262,15 @@ const PublishItem = ({ ride, type }) => {
                                     <div className="btn btn-danger px-2.5 py-2" onClick={emergencySOS}>Emergency SOS</div>
                             }
                         </div>
-                    }
-                    </div>
+                        }
+                        {
+                            (deleteSection && type === "hailed" && ride.status === "") &&
+                            <div className="d-flex align-items-center justify-content-between  ">
+                                <div className="btn btn-danger px-2 py-2" onClick={cancelRidePassenger}>Cancel Ride</div>
+                            </div>
+                        }
+
+                        </div>
                     </div>
             }
             {
