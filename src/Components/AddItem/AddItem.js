@@ -141,7 +141,8 @@ const AddItem = ({ open, setOpen }) => {
                     <div className="  mt-2 pt-2 rounded d-flex align-items-center justify-content-between">
                         <div>
                             <div className='d-flex align-items-center bg-white rounded pe-2' >
-                                <input type="number" value={rate} onChange={(e) => setRate(e.target.value)} className='rounded p-2' style={{ width: "100px", outline: "none", border: "0" }} min={1} />
+                            <b>Rs.₹<span className='text-danger'>*</span></b>
+                                <input type="number" value={rate} onChange={(e) => setRate(e.target.value)} className='rounded p-2' style={{ width: "90px", outline: "none", border: "0" }} min={1} />
                                 <NoteIcon size={22} fill={"black"} />
                             </div>
                             <hr className='m-0 p-0' />

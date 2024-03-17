@@ -35,7 +35,7 @@ const Publish = () => {
 
     return (
         <>
-            <div className='p-3'>
+            <div className='p-3' style={{width: "100vw"}}>
                 <div onClick={() => setOpen(true)} className='btn d-flex justify-content-center btn-danger align-items-center w-100 mb-4 py-2'>
                     <PlusIcon size={30} />
                     <b className='ms-2'>Publish new ride</b>
