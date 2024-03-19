@@ -2,7 +2,9 @@ import React, { useState, useRef, useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, Polyline } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 
-const Map = ({ setFrom, setTo }) => {
+const Map = () => {
+    const [from, setFrom] = useState('');
+    const [to, setTo] = useState('');
     const [originSearchQuery, setOriginSearchQuery] = useState('');
     const [destinationSearchQuery, setDestinationSearchQuery] = useState('');
     const [originSearchResults, setOriginSearchResults] = useState([]);
@@ -33,6 +35,13 @@ const Map = ({ setFrom, setTo }) => {
         const response = await fetch(`https://nominatim.openstreetmap.org/search?q=${originSearchQuery}&format=json`);
         const data = await response.json();
         setOriginSearchResults(data);
+        handleSelectOrigin();
+        handleSetOrigin();
+        if(data.length > 0){
+            console.log("originSearchResults");
+            console.log(data);
+            console.log(data[0].display_name);
+        }
     };
 
     const handleDestinationSearch = async (e) => {
@@ -40,6 +49,12 @@ const Map = ({ setFrom, setTo }) => {
         const response = await fetch(`https://nominatim.openstreetmap.org/search?q=${destinationSearchQuery}&format=json`);
         const data = await response.json();
         setDestinationSearchResults(data);
+        handleSetDestination();
+        if(data.length > 0){
+            console.log("DestinationSearchResults");    
+            console.log(data);
+            console.log(data[0].display_name);
+        }
     };
 
     const handleSelectOrigin = (location) => {
@@ -51,9 +66,15 @@ const Map = ({ setFrom, setTo }) => {
     };
 
     const handleSetOrigin = () => {
-        if (selectedOrigin) {
-            setFrom(selectedOrigin.coordinates);
-            setSelectedOrigin(null);
+        console.log("selected Origin");
+        console.log(selectedOrigin);
+        console.log("End selected Origin");
+        
+        if (originSearchResults) {
+            setFrom(originSearchResults.coordinates);
+            console.log("selectedOrigin");
+            console.log(selectedOrigin);
+            
         }
     };
 
@@ -66,24 +87,33 @@ const Map = ({ setFrom, setTo }) => {
 
     const fetchRoute = async () => {
         if (selectedOrigin && selectedDestination) {
-          try {
-            const response = await fetch(`http://router.project-osrm.org/route/v1/driving/${selectedOrigin.coordinates[1]},${selectedOrigin.coordinates[0]};${selectedDestination.coordinates[1]},${selectedDestination.coordinates[0]}?overview=full&steps=true&geometries=geojson`);
-            if (!response.ok) {
-              throw new Error('Failed to fetch route');
-            }
-            const data = await response.json();
-            console.log('Fetched route data:', data); // Log the fetched route data
-            if (data.code !== 'Ok' || !data.routes || data.routes.length === 0) {
-              throw new Error('No valid route data found');
-            }
+            try {
+                const str = selectedOrigin.name;
+            const substring = str.split(',')[0];
+            console.log("split name");
+            console.log(substring);
+                console.log("inside route");
+                console.log(selectedOrigin);
+                const response = await fetch(`http://router.project-osrm.org/route/v1/driving/${selectedOrigin.coordinates[1]},${selectedOrigin.coordinates[0]};${selectedDestination.coordinates[1]},${selectedDestination.coordinates[0]}?overview=full&steps=true&geometries=geojson`);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch route');
+                }
+                const data = await response.json();
+                console.log('Fetched route data:', data); // Log the fetched route data
+                if (data.code !== 'Ok' || !data.routes || data.routes.length === 0) {
+                    throw new Error('No valid route data found');
+                }
     
-            // Assuming data.routes[0].geometry.coordinates is an array of [longitude, latitude] pairs
-            setRoute(data.routes[0].geometry.coordinates);
-          } catch (error) {
-            console.error('Error fetching route:', error);
-          }
+                // Extract coordinates from the route data
+                const routeCoordinates = data.routes[0].geometry.coordinates.map(coord => [coord[1], coord[0]]);
+    
+                // Set the route coordinates
+                setRoute(routeCoordinates);
+            } catch (error) {
+                console.error('Error fetching route:', error);
+            }
         }
-      };
+    };
     
     
       useEffect(() => {
@@ -112,7 +142,7 @@ const Map = ({ setFrom, setTo }) => {
             </form>
             <MapContainer
                 className='markercluster'
-                style={{ height: 300, margin: 0, padding: 0 }}
+                style={{ height: 300, margin: 0, padding: 0, marginLeft: 7, marginRight: 7, borderRadius: 10, border: "3px solid rgb(140, 217, 161)"}}
                 center={[12.88, 77.45]}
                 zoom={13}
                 ref={mapRef}
@@ -138,9 +168,9 @@ const Map = ({ setFrom, setTo }) => {
                     <Polyline positions={route} color="blue" weight={5} onClick={handleRouteClick} />
                 )}
             </MapContainer>
-            {selectedOrigin && <button onClick={handleSetOrigin}>Set Origin</button>}
+            {/* {selectedOrigin && <button onClick={handleSetOrigin}>Set Origin</button>}
             {selectedDestination && <button onClick={handleSetDestination}>Set Destination</button>}
-            <button onClick={fetchRoute}>Get Route</button>
+            <button onClick={fetchRoute}>Get Route</button> */}
         </div>
     );
 };
