@@ -150,7 +150,7 @@ const Search = () => {
                 setTo(destinationSubString);
                 console.log("inside route");
                 console.log(selectedOrigin);
-                const response = await fetch(`http://router.project-osrm.org/route/v1/driving/${selectedOrigin.coordinates[1]},${selectedOrigin.coordinates[0]};${selectedDestination.coordinates[1]},${selectedDestination.coordinates[0]}?overview=full&steps=true&geometries=geojson&alternatives=true`);
+                const response = await fetch(`https://router.project-osrm.org/route/v1/driving/${selectedOrigin.coordinates[1]},${selectedOrigin.coordinates[0]};${selectedDestination.coordinates[1]},${selectedDestination.coordinates[0]}?overview=full&steps=true&geometries=geojson&alternatives=true`);
                 if (!response.ok) {
                     throw new Error('Failed to fetch routes');
                 }

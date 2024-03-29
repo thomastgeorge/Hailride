@@ -74,7 +74,8 @@ const SearchResult = () => {
                 </div>
                 <div className="w-25 text-white d-flex flex-column align-items-center bg-black p-2 rounded-3">
                     <b style={{ fontSize: "16px" }}>{dateComponents[2]}</b>
-                    <p className="m-0 p-0" style={{ fontSize: "14px" }}>{months[1]}</p>
+                    <p className="m-0 p-0" style={{ fontSize: "14px" }}>{dateComponents[1]
+                    }</p>
                     <p className="m-0 p-0" style={{ fontSize: "14px" }}>{dateComponents[0]}</p>
                 </div>
             </div>

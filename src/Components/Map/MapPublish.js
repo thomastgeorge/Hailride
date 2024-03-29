@@ -6,6 +6,7 @@ import { UserContext } from '../../App';
 import { Axios } from '../../Config/Axios/Axios';
 import { Button} from 'antd';
 import { NoteIcon, PersonFillIcon } from '@primer/octicons-react';
+import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
 
 const MapPublish = ({newPublish, setNewPublish}) => {
     const [from, setFrom] = useState('');
