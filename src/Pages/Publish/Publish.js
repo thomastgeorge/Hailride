@@ -5,13 +5,16 @@ import AddItem from '../../Components/AddItem/AddItem';
 import { Axios } from '../../Config/Axios/Axios';
 import { UserContext } from '../../App';
 import { LeapFrog } from '@uiball/loaders';
+import { Button, Modal } from 'antd';
+import { CircleSlashIcon, NoteIcon, PersonFillIcon } from '@primer/octicons-react';
+import Map from '../../Components/Map/MapPublish';
+import SearchLocation from '../../Components/SearchLocation/SearchLocation';
 
 const Publish = () => {
 
-    const [open, setOpen] = useState(false);
-
     const [rides, setRides] = useState([])
     const [loader, setloader] = useState(false)
+    const [newPublish, setNewPublish] = useState(false)
 
     const { user } = useContext(UserContext)
 
@@ -30,13 +33,18 @@ const Publish = () => {
             .catch(err => {
                 console.log(err);
             })
-    }, [open])
+    }, [newPublish])
 
+
+    const newPublishClicked = () => {
+        setNewPublish(true)
+    }
 
     return (
         <>
+            {!newPublish  ?
             <div className='p-3' style={{width: "100vw"}}>
-                <div onClick={() => setOpen(true)} className='btn d-flex justify-content-center btn-danger align-items-center w-100 mb-4 py-2'>
+                <div onClick={() => newPublishClicked()} className='btn d-flex justify-content-center btn-danger align-items-center w-100 mb-4 py-2'>
                     <PlusIcon size={30} />
                     <b className='ms-2'>Publish new ride</b>
                 </div>
@@ -64,6 +72,7 @@ const Publish = () => {
                     <b className='text-black text-nowrap mx-3'>Past Rides</b>
                     <div className='w-100'><hr /></div>
                 </div>
+                <div className="text-center w-100">
                 {
                     rides.slice().reverse().filter(ride => ride.status === "ended").map(ride => {
                         return (
@@ -71,8 +80,19 @@ const Publish = () => {
                         )
                     })
                 }
+                </div>
             </div>
-            <AddItem open={open} setOpen={setOpen} />
+            
+        
+        :
+            <>
+                <div className="py-2 pt-4 pb-4 p-2 align-items-center " style={{width: "100vw"}}>
+                    <div className='rounded m-3 pb-4' style={{ backgroundColor: "#8cd9a1" }}>
+                        <Map newPublish={newPublish} setNewPublish={setNewPublish}/>
+                    </div>
+                </div>
+            </>
+        }
         </>
     )
 }

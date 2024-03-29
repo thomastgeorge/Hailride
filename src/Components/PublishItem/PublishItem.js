@@ -10,7 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCopy } from '@fortawesome/free-regular-svg-icons';
 
 
-const PublishItem = ({ ride, type }) => {
+const PublishItem = ({ ride, type, fromCoordinates, toCoordinates, from, to }) => {
 
 
     const [deleteSection, setDeleteSection] = useState(false)
@@ -28,11 +28,15 @@ const PublishItem = ({ ride, type }) => {
         email: email,
         name: name,
         gender: gender,
-        mobile: mobile
+        mobile: mobile,
+        from: from,
+        to: to,
+        fromCoordinates: fromCoordinates,
+        toCoordinates: toCoordinates,
     })
 
     const [isUserDriver, setisUserDriver] = useState(false)
-    useEffect(() => {      
+    useEffect(() => {
         {(ride.addedByEmail === user.email) ? setisUserDriver(true): setisUserDriver(false)}
     }, [])
 
@@ -154,19 +158,19 @@ const PublishItem = ({ ride, type }) => {
     return (
         <div className="rounded my-2" style={{ backgroundColor: '#8cd9a1' }}>
             <div onClick={() => setDeleteSection(!deleteSection)}>
-                <div className='p-3 d-flex text-white' style={{height: '65px'}}>
-                    <div className='pe-2'>
+                <div className='pe-2 pt-4 d-flex text-white' style={{ maxWidth: '100%' }}>
+                    <div style={{width: "100px"}}>
                         <b style={{ whiteSpace: "nowrap" }}>{ride.starts}</b>
-                        <p style={{ whiteSpace: "nowrap" }}>{ride.from}</p>
+                        <p>{ride.from}</p>
                     </div>
-                    <div style={{ width: '100%' }}><hr /></div>
+                    <div style={{ flex: "1 1 0%", minWidth: '0', maxWidth: '100%', padding: '0 8px' }}><hr /></div>
                     {/* <div className='w-100 d-flex justify-content-center'> */}
-                    <p className="p-0 m-0 mx-2" style={{ width: 'minContent', fontSize: '14px', whiteSpace: "nowrap" }}>{ride.rideDate}</p>
+                    <p className="p-0 m-0 mx-2" style={{ flex: "1 1 auto", fontSize: '14px', whiteSpace: "nowrap" }}>{ride.rideDate}</p>
                     {/* </div> */}
-                    <div style={{ width: '100%' }}><hr /></div>
-                    <div className='ps-2'>
+                    <div style={{ flex: "1 1 0%", minWidth: '0', maxWidth: '100%', padding: '0 8px' }}><hr /></div>
+                    <div style={{ width: "100px" }}>
                         <b style={{ whiteSpace: "nowrap" }}>{ride.ends}</b>
-                        <p style={{ whiteSpace: "nowrap" }}>{ride.to}</p>
+                        <p>{ride.to}</p>
                     </div>
                 </div>
                 <div className='p-3 d-flex align-items-center justify-content-between'>
@@ -175,7 +179,7 @@ const PublishItem = ({ ride, type }) => {
                         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', marginLeft: '10px' }}>
                             <b className="text-white ms-2">{ride.addedBy}</b>
                             <div className="ms-2" style={{ display: 'inline-block' }}>
-                                {(type !== "hail" ) ? 
+                                {(type !== "hail" && !isUserDriver ) ? 
                                 <>
                                     <b style={{ display: 'inline-block', marginRight: '5px' }}>{ride.mobile}</b>
                                     <FontAwesomeIcon icon={faCopy} onClick={() => handleCopyToClipboard(ride.mobile)} style={{ cursor: 'pointer', display: 'inline-block' }} />

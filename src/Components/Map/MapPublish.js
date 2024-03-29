@@ -1,9 +1,13 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useContext } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, Polyline} from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet'; // Import Leaflet
+import { UserContext } from '../../App';
+import { Axios } from '../../Config/Axios/Axios';
+import { Button} from 'antd';
+import { NoteIcon, PersonFillIcon } from '@primer/octicons-react';
 
-const MapPublish = () => {
+const MapPublish = ({newPublish, setNewPublish}) => {
     const [from, setFrom] = useState('');
     const [to, setTo] = useState('');
     const [originSearchQuery, setOriginSearchQuery] = useState('');
@@ -15,22 +19,75 @@ const MapPublish = () => {
     const [route, setRoute] = useState([]);
     const mapRef = useRef();
     const [selectedRouteIndex, setSelectedRouteIndex] = useState(0);
+    const [selectedRouteCoordinates, setSelectedRouteCoordinates] = useState([]);
+    const [fromCoordinates, setFromCoordinates] = useState([]);
+    const [toCoordinates, setToCoordinates] = useState([]);
 
-    const handleMapClick = async (e) => {
-        const { lat, lng } = e.latlng;
-        const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`);
-        const data = await response.json();
+    const { user } = useContext(UserContext)
+    //console.log(user);
 
-        // Check if origin or destination is selected
-        if (selectedOrigin !== null) {
-            setFrom({ name: data.display_name, coordinates: [lat, lng] });
-            setSelectedOrigin(null);
+    const [valid, setvalid] = useState(true)
 
-        } else if (selectedDestination !== null) {
-            setTo({ name: data.display_name, coordinates: [lat, lng] });
-            setSelectedDestination(null);
+    const [starts, setStarts] = useState("")
+    const [ends, setEnds] = useState("")
+    const [rideDate, setRideDate] = useState("")
+    const [rate, setRate] = useState("")
+    const [passengers, setPassengers] = useState("")
+
+    const [loading, setLoading] = useState(false);
+
+    const resetForm = () => {
+        setFrom("");
+        setTo("");
+        setStarts("");
+        setEnds("");
+        setRideDate("");
+        setRate("");
+        setPassengers("");
+    }
+
+    const handleOk = () => {
+        setLoading(true);
+        if (!from || !to || !starts || !ends || !rideDate || !rate || !passengers) {
+            setvalid(false)
+            setLoading(false)
+            console.log("invalid");
+            return
         }
+        Axios.post('/api/v1/app/rides/postRide', {
+            addedByEmail: user.email,
+            addedBy: user.name,
+            from: from,
+            to: to,
+            fromCoordinates: fromCoordinates,
+            toCoordinates: toCoordinates,
+            selectedRouteCoordinates: selectedRouteCoordinates,
+            mobile: user.personalDetails?.mobile,
+            starts: starts,
+            ends: ends,
+            rideDate: rideDate,
+            rate: rate,
+            passengers: passengers,
+            addedByUserRating: user.rating,
+            addedByUserRatingCount: user.ratingCount,
+        })
+            .then(res => {
+                //setOpen(false);
+                setLoading(false)
+                resetForm()
+                console.log(res);
+                setNewPublish(false)
+            })
+            .catch(err => {
+                console.error();
+                console.log(err);
+                setLoading(false)
+            })
     };
+
+    const cancelPublish = () => {
+        setNewPublish(false)
+    }
 
     const handleOriginSearch = async (e) => {
         e.preventDefault();
@@ -38,8 +95,6 @@ const MapPublish = () => {
         const response = await fetch(`https://nominatim.openstreetmap.org/search?q=${originSearchQuery}&format=json&limit=5`);
         const data = await response.json();
         setOriginSearchResults(data);
-        handleSelectOrigin();
-        handleSetOrigin();
         if (data.length > 0) {
             console.log("originSearchResults");
             console.log(data);
@@ -49,10 +104,10 @@ const MapPublish = () => {
 
     const handleDestinationSearch = async (e) => {
         e.preventDefault();
+        if (!destinationSearchQuery) return;
         const response = await fetch(`https://nominatim.openstreetmap.org/search?q=${destinationSearchQuery}&format=json`);
         const data = await response.json();
         setDestinationSearchResults(data);
-        handleSetDestination();
         if (data.length > 0) {
             console.log("DestinationSearchResults");
             console.log(data);
@@ -62,41 +117,27 @@ const MapPublish = () => {
 
     const handleSelectOrigin = (location) => {
         setSelectedOrigin(location);
+        console.log(selectedOrigin);
     };
 
     const handleSelectDestination = (location) => {
         setSelectedDestination(location);
-    };
-
-    const handleSetOrigin = () => {
-        console.log("selected Origin");
-        console.log(selectedOrigin);
-        console.log("End selected Origin");
-
-        if (originSearchResults) {
-            setFrom(originSearchResults.coordinates);
-            console.log("selectedOrigin");
-            console.log(selectedOrigin);
-
-        }
-    };
-
-    const handleSetDestination = () => {
-        if (selectedDestination) {
-            setTo(selectedDestination.coordinates);
-            setSelectedDestination(null);
-        }
+        console.log("selectedDestination");
+        console.log(selectedDestination);
     };
 
     const fetchRoute = async () => {
         if (selectedOrigin && selectedDestination) {
             try {
-                const str = selectedOrigin.name;
-                const substring = str.split(',')[0];
+                const originStr = selectedOrigin.name;
+                const originSubString = originStr.split(',')[0];
+                const destinationStr = selectedDestination.name;
+                const destinationSubString = destinationStr.split(',')[0];
                 console.log("split name");
-                console.log(substring);
-                console.log("inside route");
-                console.log(selectedOrigin);
+                console.log(originSubString);
+                setFrom(originSubString);
+                console.log(destinationSubString);
+                setTo(destinationSubString);
                 const response = await fetch(`http://router.project-osrm.org/route/v1/driving/${selectedOrigin.coordinates[1]},${selectedOrigin.coordinates[0]};${selectedDestination.coordinates[1]},${selectedDestination.coordinates[0]}?overview=full&steps=true&geometries=geojson&alternatives=true`);
                 if (!response.ok) {
                     throw new Error('Failed to fetch routes');
@@ -109,6 +150,7 @@ const MapPublish = () => {
 
                 const routesCoordinates = data.routes.map(route => route.geometry.coordinates.map(coord => [coord[1], coord[0]]));
                 setRoute(routesCoordinates);
+                setSelectedRouteCoordinates(route[selectedRouteIndex]);
             } catch (error) {
                 console.error('Error fetching route:', error);
             }
@@ -131,9 +173,16 @@ const MapPublish = () => {
 
     useEffect(() => {
         // Fetch route initially when both origin and destination are selected
+        console.log("selected Origin");
         console.log(selectedOrigin);
+        console.log(selectedOrigin?.coordinates);
+        console.log("selected Destination");
         console.log(selectedDestination);
-        fetchRoute();
+        console.log(selectedDestination?.coordinates); 
+        if(selectedOrigin && selectedDestination)
+            fetchRoute();
+        setFromCoordinates(selectedOrigin?.coordinates);
+        setToCoordinates(selectedDestination?.coordinates);
     }, [selectedOrigin, selectedDestination]);
 
 
@@ -141,10 +190,11 @@ const MapPublish = () => {
     const handleRouteClick = (index, routeCoordinates) => {
         console.log("inside handleRouteClick, index: ", index, routeCoordinates);
         setSelectedRouteIndex(index);
-
+        setSelectedRouteCoordinates(route[selectedRouteIndex]);
     }
 
     console.log("selectedRouteIndex : ", selectedRouteIndex);
+    // console.log("selectedRouteCoordinates: ", route[selectedRouteIndex]);
 
     const iconRef = useRef(null);
     useEffect(() => {
@@ -154,25 +204,57 @@ const MapPublish = () => {
         });
     }, []);  
 
+    useEffect(() => {
+        setSelectedRouteCoordinates(route[selectedRouteIndex]);
+    }
+    , [route]);
+
 
     return (
-        <div>
-            <form onSubmit={handleOriginSearch}>
-                <input type='text' value={originSearchQuery} onChange={(e) => setOriginSearchQuery(e.target.value)} placeholder='Starting location' />
-                <button type='submit'>Search</button>
-            </form>
-            <form onSubmit={handleDestinationSearch}>
-                <input type='text' value={destinationSearchQuery} onChange={(e) => setDestinationSearchQuery(e.target.value)} placeholder='Destination location' />
-                <button type='submit'>Search</button>
-            </form>
+        <div className='p-2'>
+            <div className="py-2 pb-2 p-2 align-items-center">
+                <div className='p-2 pt-4 d-flex flex-column align-items-center'>
+                        <b style={{ fontSize: "32px" }}>Publish New Ride!</b>
+                </div>
+                {
+                    !valid &&
+                    <b className="text-danger ps-3">*Fill out the required feilds</b>
+                }
+                <div className='mx-1'>
+                    <form onSubmit={handleOriginSearch}>
+                        <div className='d-flex justify-content-between align-items-center rounded-3 p-2 pb-0 w-100'>
+                            <b>From<span className='text-danger'>*</span></b>
+                            <input 
+                                type='text'
+                                //value={from}
+                                onChange={(e) => setOriginSearchQuery(e.target.value)} 
+                                className='p-2 w-100 rounded-3'
+                                style={!valid && from === "" ? { borderColor: "red", background: "rgb(140, 217, 161)", outline: "none", border: "0" } : { outline: "none", border: "0", background: "rgb(140, 217, 161)"}} 
+                            />
+                        </div>
+                    </form>
+                    <hr className='m-0 p-0 mt-2' />
+                        <form onSubmit={handleDestinationSearch}>
+                            <div className='d-flex justify-content-between align-items-center rounded-3 p-2 pb-0 w-100'>
+                                <b>To<span className='text-danger'>*</span></b>
+                                <input 
+                                    type='text'
+                                    //value={to}
+                                    onChange={(e) => setDestinationSearchQuery(e.target.value)} 
+                                    className='p-2 w-100 rounded-3'
+                                    style={!valid && from === "" ? { borderColor: "red", background: "rgb(140, 217, 161)", outline: "none", border: "0" } : { outline: "none", border: "0", background: "rgb(140, 217, 161)"}} 
+                                />
+                            </div>
+                        </form>
+                    <hr className='m-0 p-0 pb-2' />
+                </div>
+            </div>
             <MapContainer
                 className='markercluster'
-                style={{ height: 300, margin: 0, padding: 0, marginLeft: 5, marginRight: 5, marginTop: 5, marginBottom: 5, borderRadius: 10, border: "3px solid rgb(140, 217, 161)" }}
+                style={{ height: 300, margin: 0, padding: 0, marginLeft: 5, marginRight: 5, marginTop: 5, marginBottom: 5, borderRadius: 10, border: "3px solid rgb(255, 255, 255)",}}
                 center={[12.88, 77.45]}
                 zoom={13}
                 ref={mapRef}
-                onclick={handleMapClick}
-
             >
                 <TileLayer
                     url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
@@ -199,7 +281,7 @@ const MapPublish = () => {
                     <Polyline
                         key={`route-${index}-${selectedRouteIndex}`}
                         positions={routeCoordinates}
-                         color="green"
+                        color="green"
                         //color={index === selectedRouteIndex ? 'green' : 'blue'}
                         opacity={index === selectedRouteIndex ? 1 : 0.4}
                         weight={5}
@@ -208,6 +290,75 @@ const MapPublish = () => {
                     />
                 ))}
             </MapContainer>
+            <div className="py-2 pt-3 pb-4 p-2 align-items-center mx-1">
+                <hr className='m-0 p-0' />
+                    <div>
+                        <div className='mt-2 d-flex justify-content-between align-items-center rounded-3 p-2 pb-0 w-100'>
+                            <b>Ride Date<span className='text-danger'>*</span></b>
+                            <input 
+                            value={rideDate} 
+                            onChange={e => setRideDate(e.target.value)} 
+                            className='p-2 w-75 rounded-3' 
+                            type="date"
+                            min={new Date().toISOString().split("T")[0]} // Set min attribute to current date
+                            style={!valid && rideDate ? { borderColor: "red", background: "rgb(140, 217, 161)", outline: "none", border: "0" } : {outline: "none", border: "0", background: "rgb(140, 217, 161)" }} 
+                            />
+                        </div>
+                    </div>
+                    <hr className='m-0 p-0' />
+                    <div className="mx-2 mt-2 my-1 p-2 rounded d-flex align-items-center justify-content-between">
+                        <div style={{ textAlign: "center" }} >
+                            <label htmlFor="starts">Start time</label><br />
+                            <input 
+                                id="starts"
+                                type='time' 
+                                value={starts} 
+                                onChange={(e) => setStarts(e.target.value)} 
+                                className='rounded p-2 align-items-center' 
+                                style={!valid && starts == "" ? { borderColor: "red", background: "rgb(140, 217, 161)" } : {background: "rgb(140, 217, 161"}} 
+                            />
+                        </div>
+                        <div><b>to</b></div>
+                        <div style={{ textAlign: "center" }}>
+                            <label htmlFor="ends">End time</label><br />
+                            <input 
+                                id="ends"
+                                type='time' 
+                                value={ends} 
+                                onChange={(e) => setEnds(e.target.value)} 
+                                className='rounded p-2' 
+                                style={!valid && starts == "" ? { borderColor: "red", background: "rgb(140, 217, 161)" } : {background: "rgb(140, 217, 161)"}} 
+                            />
+                        </div>
+                    </div>
+                    <div className="mx-2 mt-2 pt-2 rounded d-flex align-items-center justify-content-between">
+                        <div>
+                            <div className='d-flex align-items-center rounded pe-2'>
+                            <b>Rs.₹<span className='text-danger'>*</span></b>
+                                <input type="number" value={rate} onChange={(e) => setRate(e.target.value)} className='rounded p-2' style={{ width: "85px", outline: "none", border: "0", background: "rgb(140, 217, 161)" }} min={1} />
+                                <NoteIcon size={22} fill={"black"} />
+                            </div>
+                            <hr className='m-0 p-0' />
+                        </div>
+                        <div>
+                            <div className='d-flex align-items-center rounded pe-2'>
+                                <input type="number" value={passengers} onChange={(e) => setPassengers(e.target.value)} className='rounded p-2' style={{ width: "75px", outline: "none", border: "0", background: "rgb(140, 217, 161)" }} min={1} />
+                                <PersonFillIcon size={22} fill={"black"} />
+                            </div>
+                            <hr className='m-0 p-0' />
+                        </div>
+                    </div>
+                    <div className="mx-2 mt-2 pt-2 rounded d-flex align-items-center justify-content-between">
+                        <div onClick={cancelPublish} className='mx-1 btn d-flex justify-content-center bg-white'>
+                        <b>Cancel</b>
+                        </div>
+                        <div >  
+                            <Button type="primary" className='mx-1 mt-1' onClick={handleOk} loading={loading} style={{height: "40px"}}>
+                                Publish
+                            </Button>
+                        </div>
+                    </div>
+            </div>
         </div>
     );
 };

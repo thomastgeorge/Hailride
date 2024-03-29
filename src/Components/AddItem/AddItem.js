@@ -5,6 +5,7 @@ import { Axios } from '../../Config/Axios/Axios';
 import { UserContext } from '../../App';
 import SearchLocation from '../SearchLocation/SearchLocation';
 import { Rating } from 'react-simple-star-rating';
+import Map from '../Map/MapPublish';
 
 const AddItem = ({ open, setOpen }) => {
 
@@ -98,6 +99,7 @@ const AddItem = ({ open, setOpen }) => {
                     </Button>,
                 ]}
             >
+             <Map />
                 <div className="py-2 pb-4">
                     <div>
                         <div className='mt-2 d-flex justify-content-between align-items-center rounded-3 p-2 pb-0 w-100'>
