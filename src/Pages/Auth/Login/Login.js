@@ -28,10 +28,10 @@ const Login = ({ setauthenticated }) => {
     const nav = useNavigate()
 
     useEffect(() => {
-        if (sessionStorage.getItem("token") != null) {
+        if (localStorage.getItem("token") != null) {
             Axios.post("/api/v1/app/users/getMyProfile", {}, {
                 headers: {
-                    'authorization': `beare ${sessionStorage.getItem("token")}`
+                    'authorization': `beare ${localStorage.getItem("token")}`
                 }
             })
                 .then((res) => {
@@ -41,7 +41,7 @@ const Login = ({ setauthenticated }) => {
                 .catch((err) => {
                     console.log(err);
                     seterr("Session Expired! login again...")
-                    sessionStorage.removeItem("token")
+                    localStorage.removeItem("token")
                 })
         }
     }, [])
@@ -72,7 +72,7 @@ const Login = ({ setauthenticated }) => {
                         console.log(res?.data.user)
                         if (res?.data?.user?.email != null)
                             setUser(res.data.user)
-                        sessionStorage.setItem("token", data.token)
+                        localStorage.setItem("token", data.token)
                         setloading(false)
                     }).catch((err) => {
                         console.log(err)

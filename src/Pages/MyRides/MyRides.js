@@ -56,6 +56,7 @@ const MyRides = () => {
                 <b className='text-black text-nowrap mx-3'>Past Rides</b>
                 <div className='w-100'><hr /></div>
             </div>
+            <div className='text-center w-100'>
             {
                 rides.slice().reverse().filter(ride => ride.status === "ended").map(ride => {
                     return (
@@ -63,6 +64,7 @@ const MyRides = () => {
                     )
                 })
             }
+            </div>
         </div>
     )
 }

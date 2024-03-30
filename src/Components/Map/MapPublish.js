@@ -139,7 +139,7 @@ const MapPublish = ({newPublish, setNewPublish}) => {
                 setFrom(originSubString);
                 console.log(destinationSubString);
                 setTo(destinationSubString);
-                const response = await fetch(`http://router.project-osrm.org/route/v1/driving/${selectedOrigin.coordinates[1]},${selectedOrigin.coordinates[0]};${selectedDestination.coordinates[1]},${selectedDestination.coordinates[0]}?overview=full&steps=true&geometries=geojson&alternatives=true`);
+                const response = await fetch(`https://router.project-osrm.org/route/v1/driving/${selectedOrigin.coordinates[1]},${selectedOrigin.coordinates[0]};${selectedDestination.coordinates[1]},${selectedDestination.coordinates[0]}?overview=full&steps=true&geometries=geojson&alternatives=true`);
                 if (!response.ok) {
                     throw new Error('Failed to fetch routes');
                 }
@@ -307,7 +307,7 @@ const MapPublish = ({newPublish, setNewPublish}) => {
                         </div>
                     </div>
                     <hr className='m-0 p-0' />
-                    <div className="mx-2 mt-2 my-1 p-2 rounded d-flex align-items-center justify-content-between">
+                    <div className="mx-2 mt-2 my-1 p-2 rounded d-flex align-items-center justify-content-between" style={{maxWidth: '100%'}}>
                         <div style={{ textAlign: "center" }} >
                             <label htmlFor="starts">Start time</label><br />
                             <input 
@@ -315,7 +315,7 @@ const MapPublish = ({newPublish, setNewPublish}) => {
                                 type='time' 
                                 value={starts} 
                                 onChange={(e) => setStarts(e.target.value)} 
-                                className='rounded p-2 align-items-center' 
+                                className='rounded pt-2 pb-2 align-items-center' 
                                 style={!valid && starts == "" ? { borderColor: "red", background: "rgb(140, 217, 161)" } : {background: "rgb(140, 217, 161"}} 
                             />
                         </div>
@@ -327,7 +327,7 @@ const MapPublish = ({newPublish, setNewPublish}) => {
                                 type='time' 
                                 value={ends} 
                                 onChange={(e) => setEnds(e.target.value)} 
-                                className='rounded p-2' 
+                                className='rounded pt-2 pb-2 align-items-center' 
                                 style={!valid && starts == "" ? { borderColor: "red", background: "rgb(140, 217, 161)" } : {background: "rgb(140, 217, 161)"}} 
                             />
                         </div>
