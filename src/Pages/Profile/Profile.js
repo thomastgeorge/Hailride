@@ -94,7 +94,7 @@ const Profile = () => {
 
     const signOut = () => {
         if (window.confirm("Are you sure you want to signout?") === true) {
-            sessionStorage.removeItem("token")
+            localStorage.removeItem("token")
             setUser(null)
         }
         else {

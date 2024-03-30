@@ -8,6 +8,7 @@ import { Rating } from 'react-simple-star-rating'
 import PDetails from '../passengerDetails/pDetails'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCopy } from '@fortawesome/free-regular-svg-icons';
+import RideCardMap from '../RideCardMap/RideCardMap'
 
 
 const PublishItem = ({ ride, type, fromCoordinates, toCoordinates, from, to }) => {
@@ -215,6 +216,12 @@ const PublishItem = ({ ride, type, fromCoordinates, toCoordinates, from, to }) =
                                     </div>
                 }
             </div>
+            {
+                deleteSection &&
+                <div style={{ backgroundColor: "#1c104154" }}>
+                    <RideCardMap ride={ride} />
+                </div>
+            }
             {
                 (deleteSection && type === "published" && ride.status === "") &&
                 < div  style={{ justifyContent: "right", backgroundColor: "#1c104154" }}>
