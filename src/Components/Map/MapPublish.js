@@ -307,7 +307,7 @@ const MapPublish = ({newPublish, setNewPublish}) => {
                         </div>
                     </div>
                     <hr className='m-0 p-0' />
-                    <div className="mx-2 mt-2 my-1 p-2 rounded d-flex align-items-center justify-content-between" style={{maxWidth: '100%'}}>
+                    <div className="mx-2 mt-2 pt-2 pb-1 rounded d-flex align-items-center justify-content-between" style={{maxWidth: '280px'}}>
                         <div style={{ textAlign: "center" }} >
                             <label htmlFor="starts">Start time</label><br />
                             <input 
@@ -316,7 +316,7 @@ const MapPublish = ({newPublish, setNewPublish}) => {
                                 value={starts} 
                                 onChange={(e) => setStarts(e.target.value)} 
                                 className='rounded pt-2 pb-2 align-items-center' 
-                                style={!valid && starts == "" ? { borderColor: "red", background: "rgb(140, 217, 161)" } : {background: "rgb(140, 217, 161"}} 
+                                style={!valid && starts == "" ? { borderColor: "red", background: "rgb(140, 217, 161)", maxWidth: "100px" } : {background: "rgb(140, 217, 161", maxWidth: "100px"}} 
                             />
                         </div>
                         <div><b>to</b></div>
@@ -328,7 +328,7 @@ const MapPublish = ({newPublish, setNewPublish}) => {
                                 value={ends} 
                                 onChange={(e) => setEnds(e.target.value)} 
                                 className='rounded pt-2 pb-2 align-items-center' 
-                                style={!valid && starts == "" ? { borderColor: "red", background: "rgb(140, 217, 161)" } : {background: "rgb(140, 217, 161)"}} 
+                                style={!valid && starts == "" ? { borderColor: "red", background: "rgb(140, 217, 161)", maxWidth: "100px" } : {background: "rgb(140, 217, 161)", maxWidth: "100px"}} 
                             />
                         </div>
                     </div>
@@ -336,14 +336,14 @@ const MapPublish = ({newPublish, setNewPublish}) => {
                         <div>
                             <div className='d-flex align-items-center rounded pe-2'>
                             <b>Rs.₹<span className='text-danger'>*</span></b>
-                                <input type="number" value={rate} onChange={(e) => setRate(e.target.value)} className='rounded p-2' style={{ width: "85px", outline: "none", border: "0", background: "rgb(140, 217, 161)" }} min={1} />
+                                <input type="number" value={rate} onChange={(e) => setRate(e.target.value)} className='rounded p-2' style={{ width: "80px", outline: "none", border: "0", background: "rgb(140, 217, 161)" }} min={1} />
                                 <NoteIcon size={22} fill={"black"} />
                             </div>
                             <hr className='m-0 p-0' />
                         </div>
                         <div>
                             <div className='d-flex align-items-center rounded pe-2'>
-                                <input type="number" value={passengers} onChange={(e) => setPassengers(e.target.value)} className='rounded p-2' style={{ width: "75px", outline: "none", border: "0", background: "rgb(140, 217, 161)" }} min={1} />
+                                <input type="number" value={passengers} onChange={(e) => setPassengers(e.target.value)} className='rounded p-2' style={{ width: "60px", outline: "none", border: "0", background: "rgb(140, 217, 161)" }} min={1} />
                                 <PersonFillIcon size={22} fill={"black"} />
                             </div>
                             <hr className='m-0 p-0' />
