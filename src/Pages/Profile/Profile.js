@@ -46,7 +46,7 @@ const Profile = () => {
             licenseNumber: license
         }, {
             headers: {
-                'authorization': `beare ${sessionStorage.getItem("token")}`
+                'authorization': `beare ${localStorage.getItem("token")}`
             }
         })
             .then(res => setUpdateLic(false))
@@ -59,7 +59,7 @@ const Profile = () => {
             personalDetails: personalDetails
         }, {
             headers: {
-                'authorization': `beare ${sessionStorage.getItem("token")}`
+                'authorization': `beare ${localStorage.getItem("token")}`
             }
         })
             .then(res => setUpdatePersonal(false))
@@ -72,7 +72,7 @@ const Profile = () => {
             vehicleDetails: vehicleDetails
         }, {
             headers: {
-                'authorization': `beare ${sessionStorage.getItem("token")}`
+                'authorization': `beare ${localStorage.getItem("token")}`
             }
         })
             .then(res => setUpdateVehicle(false))
@@ -85,7 +85,7 @@ const Profile = () => {
             emergencyContact: emergency
         }, {
             headers: {
-                'authorization': `beare ${sessionStorage.getItem("token")}`
+                'authorization': `beare ${localStorage.getItem("token")}`
             }
         })
             .then(res => setUpdateEmergency(false))
