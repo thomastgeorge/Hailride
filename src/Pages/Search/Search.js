@@ -1,6 +1,5 @@
 import { BookmarkFillIcon, CalendarIcon, DuplicateIcon, PersonFillIcon, PersonIcon } from '@primer/octicons-react'
 import React, { useState, useContext, useEffect, useRef  } from 'react'
-import SearchLocation from '../../Components/SearchLocation/SearchLocation'
 import { useNavigate } from 'react-router-dom'
 import { Axios } from '../../Config/Axios/Axios'
 import { Spin } from 'antd'
@@ -13,7 +12,6 @@ import L from 'leaflet'; // Import Leaflet
 const Search = () => {
 
     const [valid, setvalid] = useState(true)
-    const [open, setOpen] = useState(false)
 
     const [from, setFrom] = useState("")
     const [to, setTo] = useState("")
@@ -37,13 +35,6 @@ const Search = () => {
     const [selectedRouteCoordinates, setSelectedRouteCoordinates] = useState([]);
     const [fromCoordinates, setFromCoordinates] = useState([]);
     const [toCoordinates, setToCoordinates] = useState([]);
-
-    const setLocation = (loc) => {
-        open === 'from' ?
-            setFrom(loc)
-            :
-            setTo(loc)
-    }
 
     const searchRides = () => {
         setloader(true)
@@ -328,7 +319,6 @@ const Search = () => {
                     </div>
                 </div>
             </div>
-            <SearchLocation open={open} setOpen={setOpen} setLocation={setLocation} />
         </>
     )
 }

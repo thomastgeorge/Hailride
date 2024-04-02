@@ -80,7 +80,9 @@ const PublishItem = ({ ride, type, fromCoordinates, toCoordinates, from, to }) =
             Axios.post('/api/v1/app/rides/emergencySOS', {
                 rider: userDetails,
                 userDetails: user,
-                emergencyContact: user.emergencyContact.email
+                emergencyContact: user.emergencyContact.email,
+                from: ride.from,
+                to: ride.to
             })
                 .then(res => {
                     setloader(false)
