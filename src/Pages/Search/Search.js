@@ -35,6 +35,8 @@ const Search = () => {
     const [selectedRouteCoordinates, setSelectedRouteCoordinates] = useState([]);
     const [fromCoordinates, setFromCoordinates] = useState([]);
     const [toCoordinates, setToCoordinates] = useState([]);
+    const [suggestions, setSuggestions] = useState([]);
+    const inputRef = useRef(null); 
 
     const searchRides = () => {
         setloader(true)
@@ -199,6 +201,50 @@ const Search = () => {
         });
     }, []); 
 
+    useEffect(() => {
+        const fetchSuggestions = async () => {
+          if (originSearchQuery.length >= 3) {
+            const apiKey = process.env.REACT_APP_ORS_API_KEY;
+            const baseUrl = 'https://api.openrouteservice.org/geocode/autocomplete';
+            const url = `${baseUrl}?&api_key=${apiKey}&text=${originSearchQuery}&boundary.country=IN`;
+    
+            try {
+              const response = await fetch(url);
+              const data = await response.json();
+              setSuggestions(data.features.slice(0, 5)); // Limit suggestions to top 5
+            } catch (error) {
+              console.error('Error fetching suggestions:', error);
+            }
+          } else {
+            setSuggestions([]);
+          }
+        };
+    
+        fetchSuggestions();
+      }, [originSearchQuery]);
+
+      const handleSuggestionClick = (suggestion) => {
+        console.log("suggestion clicked");
+        console.log(suggestion);
+        setOriginSearchQuery(suggestion.properties.label);//setSelectedOrigin({ name: suggestion.properties.label, coordinates: [suggestion.geometry.coordinates[1], suggestion.geometry.coordinates[0]] });
+        setOriginSearchResults([{ display_name: suggestion.properties.label, lat: suggestion.geometry.coordinates[1], lon: suggestion.geometry.coordinates[0] }]);
+        handleSetOrigin();
+        setSuggestions([]);
+      };
+
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+        if (inputRef.current && !inputRef.current.contains(event.target)) {
+            setSuggestions([]);
+        }
+        };
+
+        document.addEventListener('click', handleClickOutside);
+
+        return () => document.removeEventListener('click', handleClickOutside);
+    }, []);
+
     return (
         <>
             <div className='p-2 pt-4'>
@@ -213,15 +259,31 @@ const Search = () => {
                 <div className='rounded m-3 ' style={{ backgroundColor: "#8cd9a1" }}>
                     <div className='p-2 pb-4'>
                         <form onSubmit={handleOriginSearch}>
-                            <div className='d-flex justify-content-between align-items-center rounded-3 p-2 pb-0 w-100'>
-                                <b>From<span className='text-danger'>*</span></b>
-                                <input 
-                                    type='text'
-                                    //value={from}
-                                    onChange={(e) => setOriginSearchQuery(e.target.value)} 
-                                    className='p-2 w-100 rounded-3'
-                                    style={!valid && from === "" ? { borderColor: "red", background: "rgb(140, 217, 161)", outline: "none", border: "0" } : { outline: "none", border: "0", background: "rgb(140, 217, 161)"}} 
+                            <div className="d-flex justify-content-between align-items-center rounded-3 p-2 pb-0 w-100">
+                                <b>From<span className="text-danger">*</span></b>
+                                <div className="position-relative w-100">
+                                <input
+                                    type="text"
+                                    id="originInput"
+                                    ref={inputRef}
+                                    value={originSearchQuery} // Set value now
+                                    onChange={(e) => setOriginSearchQuery(e.target.value)}
+                                    className="p-2 rounded-3"
+                                    style={{ background: "rgb(140, 217, 161)", borderColor: "rgb(140, 217, 161)", outline: "none", border: "0"}}
                                 />
+                                <ul id="autocompleteList" className="list-group position-absolute top-100 w-100 shadow-sm overflow-auto" style={{ zIndex: 999 }}>
+                                    {suggestions.map((suggestion) => (
+                                    <li
+                                        key={suggestion.properties.id}
+                                        className="list-group-item"
+                                        onClick={() => handleSuggestionClick(suggestion)}
+                                        style={{ fontSize: '13px', cursor: 'pointer'}}
+                                    >
+                                        {suggestion.properties.label}
+                                    </li>
+                                    ))}
+                                </ul>
+                                </div>
                             </div>
                         </form>
                         <hr className='p-0 m-0' />
