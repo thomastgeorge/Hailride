@@ -24,6 +24,7 @@ const MapPublish = ({newPublish, setNewPublish}) => {
     const [fromCoordinates, setFromCoordinates] = useState([]);
     const [toCoordinates, setToCoordinates] = useState([]);
     const [originSuggestions, setOriginSuggestions] = useState([]);
+    const [destinationSuggestions, setDestinationSuggestions] = useState([]);
     const inputRef = useRef(null); 
 
     const { user } = useContext(UserContext)
@@ -234,6 +235,28 @@ const MapPublish = ({newPublish, setNewPublish}) => {
         fetchSuggestions();
       }, [originSearchQuery]);
 
+      useEffect(() => {
+        const fetchSuggestions = async () => {
+          if (destinationSearchQuery.length >= 3) {
+            const apiKey = process.env.REACT_APP_ORS_API_KEY;
+            const baseUrl = 'https://api.openrouteservice.org/geocode/autocomplete';
+            const url = `${baseUrl}?&api_key=${apiKey}&text=${destinationSearchQuery}&boundary.country=IN`;
+    
+            try {
+              const response = await fetch(url);
+              const data = await response.json();
+              setDestinationSuggestions(data.features.slice(0, 5)); // Limit suggestions to top 5
+            } catch (error) {
+              console.error('Error fetching suggestions:', error);
+            }
+          } else {
+            setDestinationSuggestions([]);
+          }
+        };
+    
+        fetchSuggestions();
+      }, [destinationSearchQuery]);
+
       const handleOriginSuggestionClick = (suggestion) => {
         console.log("Origin suggestion clicked");
         console.log(suggestion);
@@ -243,10 +266,19 @@ const MapPublish = ({newPublish, setNewPublish}) => {
         setOriginSuggestions([]);
       };
 
+      const handleDestinationSuggestionClick = (suggestion) => {
+        console.log("Destination suggestion clicked");
+        console.log(suggestion);
+        setDestinationSearchQuery(suggestion.properties.label);//setSelectedOrigin({ name: suggestion.properties.label, coordinates: [suggestion.geometry.coordinates[1], suggestion.geometry.coordinates[0]] });
+        setDestinationSearchResults([{ display_name: suggestion.properties.label, lat: suggestion.geometry.coordinates[1], lon: suggestion.geometry.coordinates[0] }]);
+        setDestinationSuggestions([]);
+      };
+
       useEffect(() => {
         const handleClickOutside = (event) => {
         if (inputRef.current && !inputRef.current.contains(event.target)) {
             setOriginSuggestions([]);
+            setDestinationSuggestions([]);
         }
         };
 
@@ -296,18 +328,34 @@ const MapPublish = ({newPublish, setNewPublish}) => {
                         </div>
                     </form>
                     <hr className='m-0 p-0 mt-2' />
-                        <form onSubmit={handleDestinationSearch}>
-                            <div className='d-flex justify-content-between align-items-center rounded-3 p-2 pb-0 w-100'>
-                                <b>To<span className='text-danger'>*</span></b>
-                                <input 
-                                    type='text'
-                                    //value={to}
-                                    onChange={(e) => setDestinationSearchQuery(e.target.value)} 
-                                    className='p-2 w-100 rounded-3'
-                                    style={!valid && from === "" ? { borderColor: "red", background: "rgb(140, 217, 161)", outline: "none", border: "0" } : { outline: "none", border: "0", background: "rgb(140, 217, 161)"}} 
-                                />
+                    <form onSubmit={handleDestinationSearch}>
+                        <div className="d-flex justify-content-between align-items-center rounded-3 p-2 pb-0 w-100">
+                            <b>To<span className="text-danger">*</span></b>
+                            <div className="position-relative w-100">
+                            <input
+                                type="text"
+                                id="destinationInput"
+                                ref={inputRef}
+                                value={destinationSearchQuery} // Set value now
+                                onChange={(e) => setDestinationSearchQuery(e.target.value)}
+                                className="p-2 rounded-3"
+                                style={{ background: "rgb(140, 217, 161)", borderColor: "rgb(140, 217, 161)", outline: "none", border: "0", width: "100%"}}
+                            />
+                            <ul id="autocompleteList" className="list-group position-absolute top-100 w-100 shadow-sm overflow-auto" style={{ zIndex: 999 }}>
+                                {destinationSuggestions.map((suggestion) => (
+                                <li
+                                    key={suggestion.properties.id}
+                                    className="list-group-item"
+                                    onClick={() => handleDestinationSuggestionClick(suggestion)}
+                                    style={{ fontSize: '13px', cursor: 'pointer'}}
+                                >
+                                    {suggestion.properties.label}
+                                </li>
+                                ))}
+                            </ul>
                             </div>
-                        </form>
+                        </div>
+                    </form>
                     <hr className='m-0 p-0 pb-2' />
                 </div>
             </div>
