@@ -32,7 +32,6 @@ const Search = () => {
     const [route, setRoute] = useState([]);
     const mapRef = useRef();
     const [selectedRouteIndex, setSelectedRouteIndex] = useState(0);
-    const [selectedRouteCoordinates, setSelectedRouteCoordinates] = useState([]);
     const [fromCoordinates, setFromCoordinates] = useState([]);
     const [toCoordinates, setToCoordinates] = useState([]);
     const [originSuggestions, setOriginSuggestions] = useState([]);
@@ -156,7 +155,6 @@ const Search = () => {
 
                 const routesCoordinates = data.routes.map(route => route.geometry.coordinates.map(coord => [coord[1], coord[0]]));
                 setRoute(routesCoordinates);
-                setSelectedRouteCoordinates(route[selectedRouteIndex]);
             } catch (error) {
                 console.error('Error fetching route:', error);
             }
@@ -190,7 +188,6 @@ const Search = () => {
     const handleRouteClick = (index, routeCoordinates) => {
         console.log("inside handleRouteClick, index: ", index, routeCoordinates);
         setSelectedRouteIndex(index);
-        setSelectedRouteCoordinates(route[selectedRouteIndex]);
     }
 
     const iconRef = useRef(null);
