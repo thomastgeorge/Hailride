@@ -76,16 +76,16 @@ const Search = () => {
     const handleOriginSearch = async (e) => {
         e.preventDefault();
         if (!originSearchQuery) return;
-        const response = await fetch(`https://nominatim.openstreetmap.org/search?q=${originSearchQuery}&format=json&limit=5`);
-        const data = await response.json();
-        setOriginSearchResults(data);
-        handleSelectOrigin();
-        handleSetOrigin();
-        if (data.length > 0) {
-            console.log("originSearchResults");
-            console.log(data);
-            console.log(data[0].display_name);
-        }
+            const response = await fetch(`https://nominatim.openstreetmap.org/search?q=${originSearchQuery}&format=json&limit=5`);
+            const data = await response.json();
+            setOriginSearchResults(data);
+            handleSelectOrigin();
+            handleSetOrigin();
+            if (data.length > 0) {
+                console.log("originSearchResults");
+                console.log(data);
+                console.log(data[0].display_name);
+            }
     };
 
     const handleDestinationSearch = async (e) => {
@@ -190,6 +190,8 @@ const Search = () => {
         setSelectedRouteIndex(index);
     }
 
+    console.log("selectedRouteIndex : ", selectedRouteIndex);
+
     const iconRef = useRef(null);
 
     useEffect(() => {
@@ -200,47 +202,55 @@ const Search = () => {
     }, []); 
 
     useEffect(() => {
-        const fetchSuggestions = async () => {
-          if (originSearchQuery.length >= 3) {
-            const apiKey = process.env.REACT_APP_ORS_API_KEY;
-            const baseUrl = 'https://api.openrouteservice.org/geocode/autocomplete';
-            const url = `${baseUrl}?&api_key=${apiKey}&text=${originSearchQuery}&boundary.country=IN`;
-    
-            try {
-              const response = await fetch(url);
-              const data = await response.json();
-              setOriginSuggestions(data.features.slice(0, 5)); // Limit suggestions to top 5
-            } catch (error) {
-              console.error('Error fetching suggestions:', error);
+        let timer = setTimeout(() => {
+            const fetchSuggestions = async () => {
+            if (originSearchQuery.length >= 3) {
+                const apiKey = process.env.REACT_APP_ORS_API_KEY;
+                const baseUrl = 'https://api.openrouteservice.org/geocode/autocomplete';
+                const url = `${baseUrl}?&api_key=${apiKey}&text=${originSearchQuery}&boundary.country=IN`;
+        
+                try {
+                const response = await fetch(url);
+                const data = await response.json();
+                setOriginSuggestions(data.features.slice(0, 5)); // Limit suggestions to top 5
+                } catch (error) {
+                console.error('Error fetching suggestions:', error);
+                }
+            } else {
+                setOriginSuggestions([]);
             }
-          } else {
-            setOriginSuggestions([]);
-          }
-        };
-    
-        fetchSuggestions();
+            };
+        
+            fetchSuggestions();
+        }, 650);
+
+        return () => clearTimeout(timer);
       }, [originSearchQuery]);
 
       useEffect(() => {
-        const fetchSuggestions = async () => {
-          if (destinationSearchQuery.length >= 3) {
-            const apiKey = process.env.REACT_APP_ORS_API_KEY;
-            const baseUrl = 'https://api.openrouteservice.org/geocode/autocomplete';
-            const url = `${baseUrl}?&api_key=${apiKey}&text=${destinationSearchQuery}&boundary.country=IN`;
-    
-            try {
-              const response = await fetch(url);
-              const data = await response.json();
-              setDestinationSuggestions(data.features.slice(0, 5)); // Limit suggestions to top 5
-            } catch (error) {
-              console.error('Error fetching suggestions:', error);
+        let timer = setTimeout(() => {
+            const fetchSuggestions = async () => {
+            if (destinationSearchQuery.length >= 3) {
+                const apiKey = process.env.REACT_APP_ORS_API_KEY;
+                const baseUrl = 'https://api.openrouteservice.org/geocode/autocomplete';
+                const url = `${baseUrl}?&api_key=${apiKey}&text=${destinationSearchQuery}&boundary.country=IN`;
+        
+                try {
+                const response = await fetch(url);
+                const data = await response.json();
+                setDestinationSuggestions(data.features.slice(0, 5)); // Limit suggestions to top 5
+                } catch (error) {
+                console.error('Error fetching suggestions:', error);
+                }
+            } else {
+                setDestinationSuggestions([]);
             }
-          } else {
-            setDestinationSuggestions([]);
-          }
-        };
-    
-        fetchSuggestions();
+            };
+        
+            fetchSuggestions();
+        }, 650);
+
+        return () => clearTimeout(timer);
       }, [destinationSearchQuery]);
 
       const handleOriginSuggestionClick = (suggestion) => {
