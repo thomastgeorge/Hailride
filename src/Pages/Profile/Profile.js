@@ -103,12 +103,12 @@ const Profile = () => {
     }
 
     return (
-        <div className='p-4 pb-5 mb-3 text-white' style={{ background: "#d5f8e5" }}>
+        <div className='p-4 pb-5 mb-3 text-white' style={{ background: "#d5f8e5", width: "100vw"}}>
             <div className='p-2 rounded-3 align-items-center' style={{ background: "#000" }}>
                 <div><img src="profile.png" height="100px" width="100px" style={{ borderRadius: "50%" }} /></div>
                 <div className='d-flex flex-column ms-3 text-white justify-content-center'>
                     <b className='fs-2 m-0 p-0'>{user?.name}</b>
-                    <p className='m-0 p-0'><i>{user?.email}</i></p>
+                    <p className='m-0 p-0' ><i>{user?.email}</i></p>
                     <p className='m-0 p-0'><i>{user.personalDetails?.mobile}</i></p>
                 </div>
 
@@ -145,7 +145,7 @@ const Profile = () => {
             <div className="mt-3">
                 <b className='text-black'>Personal Details</b>
                 <div className='p-3 rounded my-2' style={{ background: "#000" }}>
-                    <div className='d-flex rounded align-items-center gap-3 my-2'>
+                    <div className='d-flex rounded align-items-center gap-1 my-2'>
                         <b className='w-25'>DOB</b>
                         <div className='w-75'>
                             <input type='date' className='bg-black text-white' value={personalDetails?.dob}
@@ -175,7 +175,7 @@ const Profile = () => {
                             <hr className='m-0 p-0' />
                         </div>
                     </div>
-                    <div className='d-flex rounded align-items-center gap-3 my-2'>
+                    <div className='d-flex rounded align-items-center gap-2 my-2'>
                         <b className='w-25'>Address</b>
                         <div className='w-75'>
                             <textarea className='bg-black text-white' value={personalDetails?.address}
@@ -190,7 +190,7 @@ const Profile = () => {
                             <hr className='m-0 p-0' />
                         </div>
                     </div>
-                    <div className='d-flex rounded align-items-center gap-3 my-2'>
+                    <div className='d-flex rounded align-items-center gap-2 my-2'>
                         <b className='w-25'>Phone Number</b>
                         <div className='w-75'>
                             <input className='bg-black text-white' value={personalDetails?.mobile}
@@ -216,7 +216,7 @@ const Profile = () => {
             <div className="mt-3">
                 <b className='text-black'>Vehicle Details</b>
                 <div className='p-3 rounded my-2' style={{ background: "#000" }}>
-                    <div className='d-flex rounded align-items-center gap-3 my-2'>
+                    <div className='d-flex rounded align-items-center gap-2 my-2'>
                         <b className='w-25'>Number</b>
                         <div className='w-75'>
                             <input className='bg-black text-white' value={vehicleDetails?.number}
