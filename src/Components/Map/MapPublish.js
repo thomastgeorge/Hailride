@@ -130,6 +130,20 @@ const MapPublish = ({newPublish, setNewPublish}) => {
         console.log(selectedDestination);
     };
 
+    useEffect(() => {
+        if(selectedOrigin)
+            handleSelectLocation(selectedOrigin.coordinates);
+    }, [selectedOrigin]);
+
+    useEffect(() => {
+        if(selectedDestination)
+            handleSelectLocation(selectedDestination.coordinates);
+    }, [selectedDestination]);
+
+    const handleSelectLocation = (location) => {
+        mapRef.current.flyTo([location[0], location[1]], 13); // Fly to selected location on the map
+    };
+
     const fetchRoute = async () => {
         if (selectedOrigin && selectedDestination) {
             try {
@@ -183,8 +197,22 @@ const MapPublish = ({newPublish, setNewPublish}) => {
         console.log("selected Destination");
         console.log(selectedDestination);
         console.log(selectedDestination?.coordinates); 
-        if(selectedOrigin && selectedDestination)
+        if(selectedOrigin && selectedDestination){
             fetchRoute();
+            function flyToTwoPoints(point1, point2) {
+                // Calculate the bounding box
+                var bounds = L.latLngBounds([point1, point2]);
+            
+                // Fit the bounding box to the map view
+                mapRef.current.fitBounds(bounds);
+            }
+            
+            // Example usage
+            var point1 = L.latLng(selectedOrigin.coordinates); // Replace latitude1 and longitude1 with the coordinates of your first point
+            var point2 = L.latLng(selectedDestination.coordinates); // Replace latitude2 and longitude2 with the coordinates of your second point
+            
+            flyToTwoPoints(point1, point2);
+        }
         setFromCoordinates(selectedOrigin?.coordinates);
         setToCoordinates(selectedDestination?.coordinates);
     }, [selectedOrigin, selectedDestination]);
