@@ -478,7 +478,11 @@ const MapPublish = ({newPublish, setNewPublish}) => {
                         </div>
                     </div>
                     <hr className='m-0 p-0' />
-                    {!timeValid && <b className="mx-4 text-danger">End time should be after start time</b>}
+                    {!timeValid && (
+                        <div className="d-flex justify-content-center">
+                            <b className="text-danger">End time should be after start time</b>
+                        </div>
+                    )}
                     <div className="mx-2 mt-2 pt-2 pb-1 rounded d-flex align-items-center justify-content-between" style={{maxWidth: '280px'}}>
                         <div style={{ textAlign: "center" }} >
                             <label htmlFor="starts">Start time</label><br />

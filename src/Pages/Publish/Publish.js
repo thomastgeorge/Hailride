@@ -7,8 +7,7 @@ import { UserContext } from '../../App';
 import { LeapFrog } from '@uiball/loaders';
 import { Button, Modal } from 'antd';
 import { CircleSlashIcon, NoteIcon, PersonFillIcon } from '@primer/octicons-react';
-import Map from '../../Components/Map/MapPublish';
-import SearchLocation from '../../Components/SearchLocation/SearchLocation';
+import MapPublish from '../../Components/Map/MapPublish';
 
 const Publish = () => {
 
@@ -86,9 +85,9 @@ const Publish = () => {
         
         :
             <>
-                <div className="py-2 pt-4 pb-4 p-2 align-items-center " style={{width: "100vw"}}>
+                <div className="py-2 pt-4 pb-4  align-items-center " style={{width: "100vw"}}>
                     <div className='rounded m-3 pb-4' style={{ backgroundColor: "#8cd9a1" }}>
-                        <Map newPublish={newPublish} setNewPublish={setNewPublish}/>
+                        <MapPublish newPublish={newPublish} setNewPublish={setNewPublish}/>
                     </div>
                 </div>
             </>
