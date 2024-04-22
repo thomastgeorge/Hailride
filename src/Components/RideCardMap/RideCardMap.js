@@ -45,7 +45,7 @@ function RideCardMap({ride}) {
             <MapContainer
                 className='markercluster'
                 style={{ height: 250, margin: 0, padding: 0, marginLeft: 5, marginRight: 5, marginTop: 5, marginBottom: 5, borderRadius: 10, border: "3px solid rgb(255, 255, 255)" }}
-                center={[12.88, 77.45]}
+                center={bounds.getCenter()}
                 zoom={13}
                 ref={mapRef}
             >

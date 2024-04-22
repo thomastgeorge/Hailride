@@ -25,7 +25,8 @@ const MapPublish = ({newPublish, setNewPublish}) => {
     const [toCoordinates, setToCoordinates] = useState([]);
     const [originSuggestions, setOriginSuggestions] = useState([]);
     const [destinationSuggestions, setDestinationSuggestions] = useState([]);
-    const inputRef = useRef(null); 
+    const inputRef = useRef(null);
+    const [timeValid, setTimeValid] = useState(true)
 
     const { user } = useContext(UserContext)
     //console.log(user);
@@ -52,7 +53,7 @@ const MapPublish = ({newPublish, setNewPublish}) => {
 
     const handleOk = () => {
         setLoading(true);
-        if (!from || !to || !starts || !ends || !rideDate || !rate || !passengers) {
+        if (!from || !to || !starts || !ends || !rideDate || !rate || !passengers || !timeValid) {
             setvalid(false)
             setLoading(false)
             console.log("invalid");
@@ -76,7 +77,6 @@ const MapPublish = ({newPublish, setNewPublish}) => {
             addedByUserRatingCount: user.ratingCount,
         })
             .then(res => {
-                //setOpen(false);
                 setLoading(false)
                 resetForm()
                 console.log(res);
@@ -92,6 +92,33 @@ const MapPublish = ({newPublish, setNewPublish}) => {
     const cancelPublish = () => {
         setNewPublish(false)
     }
+
+    const handleStartChange = (e) => {
+        const startTime = e.target.value;
+        setStarts(startTime);
+        validateTime(startTime, ends);
+    };
+
+    const handleEndChange = (e) => {
+        const endTime = e.target.value;
+        setEnds(endTime);
+        validateTime(starts, endTime);
+    };
+
+    const validateTime = (startTime, endTime) => {
+        if (startTime && endTime) {
+            const [startHour, startMinute] = startTime.split(':');
+            const [endHour, endMinute] = endTime.split(':');
+
+            const start = parseInt(startHour) * 60 + parseInt(startMinute);
+            const end = parseInt(endHour) * 60 + parseInt(endMinute);
+            if (start >= end) {
+                setTimeValid(false);
+            } else {
+                setTimeValid(true);
+            }
+        }
+    };
 
     const handleOriginSearch = async (e) => {
         e.preventDefault();
@@ -451,6 +478,7 @@ const MapPublish = ({newPublish, setNewPublish}) => {
                         </div>
                     </div>
                     <hr className='m-0 p-0' />
+                    {!timeValid && <b className="mx-4 text-danger">End time should be after start time</b>}
                     <div className="mx-2 mt-2 pt-2 pb-1 rounded d-flex align-items-center justify-content-between" style={{maxWidth: '280px'}}>
                         <div style={{ textAlign: "center" }} >
                             <label htmlFor="starts">Start time</label><br />
@@ -458,9 +486,9 @@ const MapPublish = ({newPublish, setNewPublish}) => {
                                 id="starts"
                                 type='time' 
                                 value={starts} 
-                                onChange={(e) => setStarts(e.target.value)} 
+                                onChange={handleStartChange} 
                                 className='rounded pt-2 pb-2 align-items-center' 
-                                style={!valid && starts == "" ? { borderColor: "red", background: "rgb(140, 217, 161)", maxWidth: "100px" } : {background: "rgb(140, 217, 161", maxWidth: "100px"}} 
+                                style={!timeValid && starts == "" ? { borderColor: "red", background: "rgb(140, 217, 161)", maxWidth: "100px" } : {background: "rgb(140, 217, 161", maxWidth: "100px"}} 
                             />
                         </div>
                         <div><b>to</b></div>
@@ -470,9 +498,9 @@ const MapPublish = ({newPublish, setNewPublish}) => {
                                 id="ends"
                                 type='time' 
                                 value={ends} 
-                                onChange={(e) => setEnds(e.target.value)} 
+                                onChange={handleEndChange} 
                                 className='rounded pt-2 pb-2 align-items-center' 
-                                style={!valid && starts == "" ? { borderColor: "red", background: "rgb(140, 217, 161)", maxWidth: "100px" } : {background: "rgb(140, 217, 161)", maxWidth: "100px"}} 
+                                style={!timeValid && starts == "" ? { borderColor: "red", background: "rgb(140, 217, 161)", maxWidth: "100px" } : {background: "rgb(140, 217, 161)", maxWidth: "100px"}} 
                             />
                         </div>
                     </div>
@@ -497,7 +525,7 @@ const MapPublish = ({newPublish, setNewPublish}) => {
                         <div onClick={cancelPublish} className='mx-1 btn d-flex justify-content-center bg-white'>
                         <b>Cancel</b>
                         </div>
-                        <div >  
+                        <div >
                             <Button type="primary" className='mx-1 mt-1' onClick={handleOk} loading={loading} style={{height: "40px"}}>
                                 Publish
                             </Button>
