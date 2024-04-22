@@ -207,9 +207,8 @@ const MapPublish = ({newPublish, setNewPublish}) => {
                 mapRef.current.fitBounds(bounds);
             }
             
-            // Example usage
-            var point1 = L.latLng(selectedOrigin.coordinates); // Replace latitude1 and longitude1 with the coordinates of your first point
-            var point2 = L.latLng(selectedDestination.coordinates); // Replace latitude2 and longitude2 with the coordinates of your second point
+            var point1 = L.latLng(selectedOrigin.coordinates); 
+            var point2 = L.latLng(selectedDestination.coordinates);
             
             flyToTwoPoints(point1, point2);
         }

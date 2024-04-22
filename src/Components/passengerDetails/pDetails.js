@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCopy } from '@fortawesome/free-regular-svg-icons';
 
 const PDetails = ({ride, isUserDriver}) => {
-    const [passengers, setPassengers] = useState("")
+    const [passengers, setPassengers] = useState([])
 
     useEffect(() => {
         Axios.get('/api/v1/app/rides/getPassengerDetails', {
