@@ -37,6 +37,8 @@ const Search = () => {
     const [originSuggestions, setOriginSuggestions] = useState([]);
     const [destinationSuggestions, setDestinationSuggestions] = useState([]);
     const inputRef = useRef(null); 
+    const [originSuggestionClicked, setOriginSuggestionClicked] = useState(false);
+    const [destinationSuggestionClicked, setDestinationSuggestionClicked] = useState(false);
 
     const searchRides = () => {
         setloader(true)
@@ -129,6 +131,29 @@ const Search = () => {
         }
     };
 
+    const handleSearchQueryChange = (event) => {
+        setOriginSearchQuery(event.target.value); 
+        if(originSuggestionClicked){
+            setOriginSuggestionClicked(false)
+        }
+    }
+
+    const handleDestinationQueryChange = (event) => {
+        setDestinationSearchQuery(event.target.value); 
+        if(destinationSuggestionClicked){
+            setDestinationSuggestionClicked(false)
+        }
+    }
+
+    useEffect(() => {
+        if(!originSuggestionClicked){
+            setDestinationSuggestionClicked(true)
+        }
+        if(!destinationSuggestionClicked){
+            setOriginSuggestionClicked(true)
+        }
+    }, [originSearchQuery, destinationSearchQuery]);
+
     useEffect(() => {
         if(selectedOrigin)
             handleSelectLocation(selectedOrigin.coordinates);
@@ -140,8 +165,9 @@ const Search = () => {
     }, [selectedDestination]);
 
     const handleSelectLocation = (location) => {
-        //setSearchQuery(location.properties.label);
         mapRef.current.flyTo([location[0], location[1]], 13); // Fly to selected location on the map
+        setOriginSuggestionClicked(true);
+        setDestinationSuggestionClicked(true);
     };
 
     const fetchRoute = async () => {
@@ -281,22 +307,26 @@ const Search = () => {
         return () => clearTimeout(timer);
       }, [destinationSearchQuery]);
 
-      const handleOriginSuggestionClick = (suggestion) => {
+      const handleOriginSuggestionClick = (event, suggestion) => {
+        event.stopPropagation();
         console.log("Origin suggestion clicked");
         console.log(suggestion);
         setOriginSearchQuery(suggestion.properties.label);//setSelectedOrigin({ name: suggestion.properties.label, coordinates: [suggestion.geometry.coordinates[1], suggestion.geometry.coordinates[0]] });
         setOriginSearchResults([{ display_name: suggestion.properties.label, lat: suggestion.geometry.coordinates[1], lon: suggestion.geometry.coordinates[0] }]);
         handleSetOrigin();
         setOriginSuggestions([]);
+        setOriginSuggestionClicked(true);
       };
 
-      const handleDestinationSuggestionClick = (suggestion) => {
+      const handleDestinationSuggestionClick = (event, suggestion) => {
+        event.stopPropagation();
         console.log("Destination suggestion clicked");
         console.log(suggestion);
         setDestinationSearchQuery(suggestion.properties.label);//setSelectedOrigin({ name: suggestion.properties.label, coordinates: [suggestion.geometry.coordinates[1], suggestion.geometry.coordinates[0]] });
         setDestinationSearchResults([{ display_name: suggestion.properties.label, lat: suggestion.geometry.coordinates[1], lon: suggestion.geometry.coordinates[0] }]);
         handleSetDestination();
         setDestinationSuggestions([]);
+        setDestinationSuggestionClicked(true);
       };
 
     useEffect(() => {
@@ -304,6 +334,8 @@ const Search = () => {
         if (inputRef.current && !inputRef.current.contains(event.target)) {
             setOriginSuggestions([]);
             setDestinationSuggestions([]);
+            setOriginSuggestionClicked(false);
+            setDestinationSuggestionClicked(false);
         }
         };
 
@@ -334,16 +366,16 @@ const Search = () => {
                                     id="originInput"
                                     ref={inputRef}
                                     value={originSearchQuery} // Set value now
-                                    onChange={(e) => setOriginSearchQuery(e.target.value)}
+                                    onChange={(e) => handleSearchQueryChange(e)}
                                     className="p-2 rounded-3"
                                     style={{ background: "rgb(140, 217, 161)", borderColor: "rgb(140, 217, 161)", outline: "none", border: "0", width: "100%"}}
                                 />
                                 <ul id="autocompleteList" className="list-group position-absolute top-100 w-100 shadow-sm overflow-auto" style={{ zIndex: 999 }}>
-                                    {originSuggestions.map((suggestion) => (
+                                    {!originSuggestionClicked && originSuggestions.map((suggestion) => (
                                     <li
                                         key={suggestion.properties.id}
                                         className="list-group-item"
-                                        onClick={() => handleOriginSuggestionClick(suggestion)}
+                                        onClick={(e) => handleOriginSuggestionClick(e, suggestion)}
                                         style={{ fontSize: '13px', cursor: 'pointer'}}
                                     >
                                         {suggestion.properties.label}
@@ -363,16 +395,16 @@ const Search = () => {
                                     id="destinationInput"
                                     ref={inputRef}
                                     value={destinationSearchQuery} // Set value now
-                                    onChange={(e) => setDestinationSearchQuery(e.target.value)}
+                                    onChange={(e) => handleDestinationQueryChange(e)}
                                     className="p-2 rounded-3"
                                     style={{ background: "rgb(140, 217, 161)", borderColor: "rgb(140, 217, 161)", outline: "none", border: "0", width: "100%"}}
                                 />
                                 <ul id="autocompleteList" className="list-group position-absolute top-100 w-100 shadow-sm overflow-auto" style={{ zIndex: 999 }}>
-                                    {destinationSuggestions.map((suggestion) => (
+                                    {!destinationSuggestionClicked && destinationSuggestions.map((suggestion) => (
                                     <li
                                         key={suggestion.properties.id}
                                         className="list-group-item"
-                                        onClick={() => handleDestinationSuggestionClick(suggestion)}
+                                        onClick={(e) => handleDestinationSuggestionClick(e, suggestion)}
                                         style={{ fontSize: '13px', cursor: 'pointer'}}
                                     >
                                         {suggestion.properties.label}
