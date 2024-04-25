@@ -368,7 +368,7 @@ const Search = () => {
                                     value={originSearchQuery} // Set value now
                                     onChange={(e) => handleSearchQueryChange(e)}
                                     className="p-2 rounded-3"
-                                    style={{ background: "rgb(140, 217, 161)", borderColor: "rgb(140, 217, 161)", outline: "none", border: "0", width: "100%"}}
+                                    style={!valid && !selectedOrigin? {background: "rgb(140, 217, 161)", outline: "none", border: "1px solid red", width: "100%"} : { background: "rgb(140, 217, 161)", outline: "none", border: "0", width: "100%"}}
                                 />
                                 <ul id="autocompleteList" className="list-group position-absolute top-100 w-100 shadow-sm overflow-auto" style={{ zIndex: 999 }}>
                                     {!originSuggestionClicked && originSuggestions.map((suggestion) => (
@@ -389,7 +389,7 @@ const Search = () => {
                         <form onSubmit={handleDestinationSearch}>
                             <div className="d-flex justify-content-between align-items-center rounded-3 p-2 pb-0 w-100">
                                 <b>To<span className="text-danger">*</span></b>
-                                <div className="position-relative w-100">
+                                <div className="position-relative w-100 ps-4">
                                 <input
                                     type="text"
                                     id="destinationInput"
@@ -397,7 +397,7 @@ const Search = () => {
                                     value={destinationSearchQuery} // Set value now
                                     onChange={(e) => handleDestinationQueryChange(e)}
                                     className="p-2 rounded-3"
-                                    style={{ background: "rgb(140, 217, 161)", borderColor: "rgb(140, 217, 161)", outline: "none", border: "0", width: "100%"}}
+                                    style={!valid && !selectedDestination?  {background: "rgb(140, 217, 161)", borderColor: "rgb(140, 217, 161)", outline: "none", border: "1px solid red", width: "100%"} : { background: "rgb(140, 217, 161)", borderColor: "rgb(140, 217, 161)", outline: "none", border: "0", width: "100%"}}
                                 />
                                 <ul id="autocompleteList" className="list-group position-absolute top-100 w-100 shadow-sm overflow-auto" style={{ zIndex: 999 }}>
                                     {!destinationSuggestionClicked && destinationSuggestions.map((suggestion) => (
@@ -467,7 +467,7 @@ const Search = () => {
                                 value={date} 
                                 onChange={e => setDate(e.target.value)} 
                                 className='rounded p-2 pointer-events-none bg-gray-300' 
-                                style={{ outline: "none", border: "0", background: "rgb(140, 217, 161)" }} 
+                                style={!valid && !date? { outline: "none", border: "1px solid red", background: "rgb(140, 217, 161)"} : { outline: "none", border: "0", background: "rgb(140, 217, 161)" }} 
                                 min={new Date().toISOString().split("T")[0]} // Disable past dates
                                 />
                             <hr className='p-0 m-0 text-dark' />
@@ -477,7 +477,10 @@ const Search = () => {
                                 <p className='mb-1 text-dark fw-bold'>Passengers<span className='text-danger'>*</span></p>
                                 <div className='rounded pe-2'>
                                     <div>
-                                        <input type="number" value={passengers} onChange={e => { setPassengers(e.target.value) }} className='rounded p-2' style={{ width: "80px", outline: "none", border: "0", background: "rgb(140, 217, 161)" }} min={1} max={6} />
+                                        <input type="number" value={passengers} onChange={e => { setPassengers(e.target.value) }}
+                                        className='rounded p-2'
+                                        style={!valid && !passengers? { width: "80px", outline: "none", border: "1px solid red", background: "rgb(140, 217, 161)"} : { width: "80px", outline: "none", border: "0", background: "rgb(140, 217, 161)" }}
+                                        min={1} max={8} />
                                         <PersonFillIcon size={22} fill={"black"} />
                                     </div>
                                     <hr className='p-0 m-0 text-dark' />

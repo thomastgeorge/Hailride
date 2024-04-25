@@ -315,7 +315,7 @@ const MapPublish = ({newPublish, setNewPublish}) => {
             };
         
             fetchSuggestions();
-        }, 650);
+        }, 500);
 
         return () => clearTimeout(timer);
       }, [originSearchQuery]);
@@ -341,7 +341,7 @@ const MapPublish = ({newPublish, setNewPublish}) => {
             };
         
             fetchSuggestions();
-        }, 650);
+        }, 500);
 
         return () => clearTimeout(timer);
       }, [destinationSearchQuery]);
@@ -404,7 +404,7 @@ const MapPublish = ({newPublish, setNewPublish}) => {
                                 value={originSearchQuery} // Set value now
                                 onChange={(e) => handleSearchQueryChange(e)}
                                 className="p-2 rounded-3"
-                                style={{ background: "rgb(140, 217, 161)", borderColor: "rgb(140, 217, 161)", outline: "none", border: "0", width: "100%"}}
+                                style={!valid && !selectedOrigin?{background: "rgb(140, 217, 161)", outline: "none", border: "1px solid red", width: "100%"} :{ background: "rgb(140, 217, 161)", outline: "none", border: "0", width: "100%"}}
                             />
                             <ul id="autocompleteList" className="list-group position-absolute top-100 w-100 shadow-sm overflow-auto" style={{ zIndex: 999 }}>
                                 {!originSuggestionClicked && originSuggestions.map((suggestion) => (
@@ -425,7 +425,7 @@ const MapPublish = ({newPublish, setNewPublish}) => {
                     <form onSubmit={handleDestinationSearch}>
                         <div className="d-flex justify-content-between align-items-center rounded-3 p-2 pb-0 w-100">
                             <b>To<span className="text-danger">*</span></b>
-                            <div className="position-relative w-100">
+                            <div className="position-relative w-100 ps-4">
                             <input
                                 type="text"
                                 id="destinationInput"
@@ -433,7 +433,7 @@ const MapPublish = ({newPublish, setNewPublish}) => {
                                 value={destinationSearchQuery} // Set value now
                                 onChange={(e) => handleDestinationQueryChange(e)}
                                 className="p-2 rounded-3"
-                                style={{ background: "rgb(140, 217, 161)", borderColor: "rgb(140, 217, 161)", outline: "none", border: "0", width: "100%"}}
+                                style={!valid && !selectedDestination? {background: "rgb(140, 217, 161)", outline: "none", border: "1px solid red", width: "100%"} : { background: "rgb(140, 217, 161)", outline: "none", border: "0", width: "100%"}}
                             />
                             <ul id="autocompleteList" className="list-group position-absolute top-100 w-100 shadow-sm overflow-auto" style={{ zIndex: 999 }}>
                                 {!destinationSuggestionClicked && destinationSuggestions.map((suggestion) => (
@@ -505,7 +505,7 @@ const MapPublish = ({newPublish, setNewPublish}) => {
                             className='p-2 w-75 rounded-3' 
                             type="date"
                             min={new Date().toISOString().split("T")[0]} // Set min attribute to current date
-                            style={!valid && rideDate ? { borderColor: "red", background: "rgb(140, 217, 161)", outline: "none", border: "0" } : {outline: "none", border: "0", background: "rgb(140, 217, 161)" }} 
+                            style={!valid && !rideDate ? { background: "rgb(140, 217, 161)", outline: "none", border: "1px solid red" } : {outline: "none", border: "0", background: "rgb(140, 217, 161)" }} 
                             />
                         </div>
                     </div>
@@ -524,7 +524,7 @@ const MapPublish = ({newPublish, setNewPublish}) => {
                                 value={starts} 
                                 onChange={handleStartChange} 
                                 className='rounded pt-2 pb-2 align-items-center' 
-                                style={!timeValid && starts == "" ? { borderColor: "red", background: "rgb(140, 217, 161)", maxWidth: "100px" } : {background: "rgb(140, 217, 161", maxWidth: "100px"}} 
+                                style={!valid && starts=="" ? {background: "rgb(140, 217, 161)", border: "1px solid red", maxWidth: "100px", outline: "none" } : {border: "1px solid black", background: "rgb(140, 217, 161", outline: "none", maxWidth: "100px"}} 
                             />
                         </div>
                         <div><b>to</b></div>
@@ -536,7 +536,7 @@ const MapPublish = ({newPublish, setNewPublish}) => {
                                 value={ends} 
                                 onChange={handleEndChange} 
                                 className='rounded pt-2 pb-2 align-items-center' 
-                                style={!timeValid && starts == "" ? { borderColor: "red", background: "rgb(140, 217, 161)", maxWidth: "100px" } : {background: "rgb(140, 217, 161)", maxWidth: "100px"}} 
+                                style={!valid && ends=="" ? {background: "rgb(140, 217, 161)", border: "1px solid red", maxWidth: "100px" } : {border: "1px solid black", background: "rgb(140, 217, 161)", outline: "none", maxWidth: "100px"}} 
                             />
                         </div>
                     </div>
@@ -544,14 +544,18 @@ const MapPublish = ({newPublish, setNewPublish}) => {
                         <div>
                             <div className='d-flex align-items-center rounded pe-2'>
                             <b>Rs.₹<span className='text-danger'>*</span></b>
-                                <input type="number" value={rate} onChange={(e) => setRate(e.target.value)} className='rounded p-2' style={{ width: "80px", outline: "none", border: "0", background: "rgb(140, 217, 161)" }} min={1} />
+                                <input type="number" value={rate} onChange={(e) => setRate(e.target.value)}
+                                className='rounded p-2' 
+                                style={!valid && !rate ?{ width: "80px", outline: "none", border: "1px solid red", background: "rgb(140, 217, 161)"}:{ width: "80px", outline: "none", border: "0", background: "rgb(140, 217, 161)" }} min={1} />
                                 <NoteIcon size={22} fill={"black"} />
                             </div>
                             <hr className='m-0 p-0' />
                         </div>
                         <div>
                             <div className='d-flex align-items-center rounded pe-2'>
-                                <input type="number" value={passengers} onChange={(e) => setPassengers(e.target.value)} className='rounded p-2' style={{ width: "60px", outline: "none", border: "0", background: "rgb(140, 217, 161)" }} min={1} />
+                                <input type="number" value={passengers} onChange={(e) => setPassengers(e.target.value)}
+                                className='rounded p-2' 
+                                style={!valid && !passengers? {width: "60px", outline: "none", border: "1px solid red", background: "rgb(140, 217, 161)"}:{ width: "60px", outline: "none", border: "0", background: "rgb(140, 217, 161)" }} min={1} />
                                 <PersonFillIcon size={22} fill={"black"} />
                             </div>
                             <hr className='m-0 p-0' />
