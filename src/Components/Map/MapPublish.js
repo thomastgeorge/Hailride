@@ -91,6 +91,71 @@ const MapPublish = ({newPublish, setNewPublish}) => {
             })
     };
 
+
+
+
+
+
+	// Define the car icon
+	const carIcon = L.icon({
+		iconUrl: 'car_icon_top_view.svg',
+		iconSize: [32, 48],
+	});
+
+	const markerRef = useRef();
+	const intervalRef = useRef();
+
+	useEffect(() => {
+		if (!selectedRouteCoordinates || selectedRouteCoordinates.length === 0) return;
+
+		const map = mapRef.current;
+		if (!map) return;
+
+		// If the marker exists, remove it from the map
+        if (markerRef.current) {
+            map.removeLayer(markerRef.current);
+        }
+
+        // Initialize the marker at the start point
+        markerRef.current = L.marker(selectedRouteCoordinates[0], { icon: carIcon }).addTo(map);
+
+		let index = 0;
+
+		const moveMarker = () => {
+			if (index < selectedRouteCoordinates.length) {
+				markerRef.current.setLatLng(selectedRouteCoordinates[index]);
+				index += Math.ceil(selectedRouteCoordinates.length/124)
+
+			} else {
+				clearInterval(intervalRef.current);
+				setTimeout(() => {
+					index = 0;
+					markerRef.current.setLatLng(selectedRouteCoordinates[0]);
+					// time delay for repeated traversing
+					intervalRef.current = setInterval(moveMarker, 250);
+				}, 3000); // 3 seconds delay before restarting
+			}
+		};
+
+		// first time traversing
+		intervalRef.current = setInterval(moveMarker, 250);
+
+		return () => {
+			clearInterval(intervalRef.current);
+			map.removeLayer(markerRef.current);
+		};
+	}, [selectedRouteCoordinates ]);
+
+
+
+
+
+
+
+
+
+
+
     const cancelPublish = () => {
         setNewPublish(false)
     }
@@ -272,11 +337,17 @@ const MapPublish = ({newPublish, setNewPublish}) => {
 
 
 
-    const handleRouteClick = (index, routeCoordinates) => {
-        console.log("inside handleRouteClick, index: ", index, routeCoordinates);
-        setSelectedRouteIndex(index);
-        setSelectedRouteCoordinates(route[selectedRouteIndex]);
-    }
+	const handleRouteClick = (index, routeCoordinates) => {
+		fetchRoute()
+			.then(()=>{
+				console.log("inside handleRouteClick, index: ", index, routeCoordinates);
+				setSelectedRouteCoordinates(route[selectedRouteIndex]);
+				setSelectedRouteIndex(index);
+			})
+			.catch(error =>{
+				console.log("error caught in fetchRoute()")
+			})
+	}
 
     console.log("selectedRouteIndex : ", selectedRouteIndex);
     // console.log("selectedRouteCoordinates: ", route[selectedRouteIndex]);
@@ -326,8 +397,7 @@ const MapPublish = ({newPublish, setNewPublish}) => {
             if (destinationSearchQuery.length >= 3) {
                 const apiKey = process.env.REACT_APP_ORS_API_KEY;
                 const baseUrl = 'https://api.openrouteservice.org/geocode/autocomplete';
-                const url = `${baseUrl}?&api_key=${apiKey}&text=${destinationSearchQuery}&boundary.country=IN`;
-        
+                const url = `${baseUrl}?&api_key=${apiKey}&text=${destinationSearchQuery}&boundary.country=IN`;       
                 try {
                 const response = await fetch(url);
                 const data = await response.json();
