@@ -37,6 +37,11 @@ function RideCardMap({ride}) {
         iconSize: [23, 23],
     }));
 
+	const passengerIcon = useRef(L.icon({
+		iconUrl: "passenger_icon.svg",
+		iconSize: [23, 23],
+	}))
+
     console.log("hailed by coordinates");
     console.log(ride.hailedBy[0]?.toCoordinates);
 
@@ -68,7 +73,7 @@ function RideCardMap({ride}) {
                             <Marker 
                                 key={index}
                                 position={[hailedBy.fromCoordinates[0], hailedBy.fromCoordinates[1]]}
-                                icon={iconRef.current}
+                                icon={passengerIcon.current}
                             >
                                 <Popup>
                                     Hailed By:
