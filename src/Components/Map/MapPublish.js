@@ -7,6 +7,8 @@ import { Axios } from '../../Config/Axios/Axios';
 import { Button} from 'antd';
 import { NoteIcon, PersonFillIcon } from '@primer/octicons-react';
 import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
+import 'leaflet-rotatedmarker';
+
 
 const MapPublish = ({newPublish, setNewPublish}) => {
     const [from, setFrom] = useState('');
@@ -91,16 +93,13 @@ const MapPublish = ({newPublish, setNewPublish}) => {
             })
     };
 
-
-
-
-
-
-	// Define the car icon
-	const carIcon = L.icon({
-		iconUrl: 'car_icon_top_view.svg',
-		iconSize: [32, 48],
-	});
+	const createCarIcon = (angle) => {
+		return L.divIcon({
+			html: `<img src="car_top_view_icon.svg" style="transform: rotate(${angle}deg); display: block; width: 32px; height: 48px;"/>`,
+			iconSize: [32, 48],
+			className: 'car-icon-container',
+		});
+	};
 
 	const markerRef = useRef();
 	const intervalRef = useRef();
@@ -112,20 +111,28 @@ const MapPublish = ({newPublish, setNewPublish}) => {
 		if (!map) return;
 
 		// If the marker exists, remove it from the map
-        if (markerRef.current) {
-            map.removeLayer(markerRef.current);
-        }
-
-        // Initialize the marker at the start point
-        markerRef.current = L.marker(selectedRouteCoordinates[0], { icon: carIcon }).addTo(map);
+		if (markerRef.current) {
+			map.removeLayer(markerRef.current);
+		}
 
 		let index = 0;
+		let angle = 0;
+
+		// Initialize the marker at the start point
+		markerRef.current = L.marker(selectedRouteCoordinates[0], { icon: createCarIcon(angle) }).addTo(map);
 
 		const moveMarker = () => {
 			if (index < selectedRouteCoordinates.length) {
-				markerRef.current.setLatLng(selectedRouteCoordinates[index]);
-				index += Math.ceil(selectedRouteCoordinates.length/124)
+				const currentPoint = selectedRouteCoordinates[index];
+				const nextPoint = selectedRouteCoordinates[index + 1];
 
+				if (nextPoint) {
+					angle = Math.atan2(nextPoint[1] - currentPoint[1], nextPoint[0] - currentPoint[0]) * 180 / Math.PI;
+				}
+
+				markerRef.current.setIcon(createCarIcon(angle));
+				markerRef.current.setLatLng(currentPoint);
+				index += Math.ceil(selectedRouteCoordinates.length / 124);
 			} else {
 				clearInterval(intervalRef.current);
 				setTimeout(() => {
@@ -144,17 +151,7 @@ const MapPublish = ({newPublish, setNewPublish}) => {
 			clearInterval(intervalRef.current);
 			map.removeLayer(markerRef.current);
 		};
-	}, [selectedRouteCoordinates ]);
-
-
-
-
-
-
-
-
-
-
+	}, [selectedRouteCoordinates]);
 
     const cancelPublish = () => {
         setNewPublish(false)
