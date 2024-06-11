@@ -94,8 +94,8 @@ const MapPublish = ({newPublish, setNewPublish}) => {
 
 	const createCarIcon = (angle) => {
 		return L.divIcon({
-			html: `<img src="car_top_view_icon.svg" style="transform: rotate(${angle}deg); display: block; width: 32px; height: 48px;"/>`,
-			iconSize: [32, 48],
+			html: `<img src="car_top_view_icon.svg" style="transform: rotate(${angle}deg); display: block; width: 28px; height: 28px;"/>`,
+			iconSize: [28, 28],
 			className: 'car-icon-container',
 		});
 	};
@@ -131,7 +131,7 @@ const MapPublish = ({newPublish, setNewPublish}) => {
 
 				markerRef.current.setIcon(createCarIcon(angle));
 				markerRef.current.setLatLng(currentPoint);
-				index += Math.ceil(selectedRouteCoordinates.length / 124);
+				index += Math.ceil(selectedRouteCoordinates.length / 125);
 			} else {
 				clearInterval(intervalRef.current);
 				setTimeout(() => {

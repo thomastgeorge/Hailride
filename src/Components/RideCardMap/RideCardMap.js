@@ -19,6 +19,7 @@ function MapPosition(bounds){
 
         ref.current = node
         ref.current?.fitBounds(bounds);
+		
     }, [])
 
   return [setRef]
@@ -37,12 +38,7 @@ function RideCardMap({ride}) {
         iconSize: [23, 23],
     }));
 
-	const passengerIcon = useRef(L.icon({
-		iconUrl: "passenger_icon.svg",
-		iconSize: [23, 23],
-	}))
-
-    console.log("hailed by coordinates");
+    console.log("hailed by ToCoordinates");
     console.log(ride.hailedBy[0]?.toCoordinates);
 
     return (
@@ -73,7 +69,7 @@ function RideCardMap({ride}) {
                             <Marker 
                                 key={index}
                                 position={[hailedBy.fromCoordinates[0], hailedBy.fromCoordinates[1]]}
-                                icon={passengerIcon.current}
+                                icon={iconRef.current}
                             >
                                 <Popup>
                                     Hailed By:
