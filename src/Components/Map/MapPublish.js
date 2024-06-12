@@ -358,8 +358,7 @@ const MapPublish = ({newPublish, setNewPublish}) => {
 
     useEffect(() => {
         setSelectedRouteCoordinates(route[selectedRouteIndex]);
-    }
-    , [route]);
+    }, [route]);
 
     useEffect(() => {
         let timer = setTimeout(() => {
